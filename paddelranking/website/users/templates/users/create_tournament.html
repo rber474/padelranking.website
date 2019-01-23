@@ -1,0 +1,86 @@
+{% extends "base_dashboard.html" %}
+{% block content %}
+	<div class="row right_col" role="main">
+    {% block messages %}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+              {% else %}
+              <div class="alert alert-info" role="alert">{{ message }}</div>
+              {% endif %}
+          {% endfor %}
+      {% endif %}
+      {% endwith %}
+    {% endblock messages %}
+    <h1 class="col-md-offset-4">{{title}}</h1>
+  	<div>
+      <div class="col-md-4">
+      	<p>All fields marked with * are required</p>
+          
+        <script type="text/javascript">
+
+            $("#add-player").on('click', function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: "{{ url_for('users.add_player', username=current_user.username) }}",
+                    type : "POST",
+                    //dataType : 'json', // data type
+                    data : $("#main-form").serialize(),
+                    success : function(result) {
+                        console.log(result);
+                        $("#players").html(result);
+                    },
+                    error: function(xhr, resp, text) {
+                        console.log(xhr, resp, text);
+                    }
+                });
+
+                event.preventDefault();
+                });
+        </script>
+    
+
+        <form 
+          method="POST" 
+          action="{{ url_for('users.create_tournament', username=current_user.username) }}" id="main-form">
+        {{ form.hidden_tag() }}
+
+          <div class="form-group">
+          {{ form.name.label }} {{ form.name(class="form-control") }}
+          </div>
+          <div class="form-group">
+          {{ form.point_per_match.label }} {{ form.point_per_match(class="form-control") }}
+          </div>
+          <div class="form-group">
+          {{ form.match_per_round.label }} {{ form.match_per_round(class="form-control") }}
+          </div>
+          <div class="form-group">
+          {{ form.rounds_qty.label }} {{ form.rounds_qty(class="form-control") }}
+          </div>
+          <fieldset class="form-group"aria-labelledby="players_fieldset">
+            <span id="players_fieldset" class="h3">Players</span>
+            <div class="form-row">
+            {{ form.player_list.label }} {{ form.player_list(class="form-control") }}
+            </div>
+
+            <span id="players">{% include '/users/players.html' %}</span>
+
+            <div class="form-row">
+                {{ form.add_player(id="add-player", class="btn btn-success") }}
+            </div>
+          </fieldset>
+        {{form.submit(class="btn btn-primary")}} {{form.cancel(class="btn")}}
+        </form>
+
+
+
+
+      </div>
+    </div>
+
+
+
+  </div>
+{% endblock %}

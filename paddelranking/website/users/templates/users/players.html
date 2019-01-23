@@ -1,0 +1,14 @@
+
+{% if form.players%}
+    <div class="form-row">
+        <div class="col-1 form-group">Or add new players here...</div>
+    </div>
+{% endif %}
+
+{% for player in form.players %}    
+    <div class="form-row">
+        {% for field in player %}
+            <div class="col-1 form-group">{{ field(class="form-control", placeholder="Player Name") }}</div>
+        {% endfor %}
+    </div>
+{% endfor %}

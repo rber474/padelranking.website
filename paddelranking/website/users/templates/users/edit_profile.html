@@ -1,0 +1,38 @@
+{% extends "base_dashboard.html" %}
+{% block styles%}
+  {{ super() }}
+  <link href="{{ url_for('static', filename='build/css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block content %}
+	<div class="row right_col" role="main">
+    {% block messages %}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+              {% else %}
+              <div class="alert alert-info" role="alert">{{ message }}</div>
+              {% endif %}
+          {% endfor %}
+      {% endif %}
+      {% endwith %}
+    {% endblock messages %}
+    <h1 class="col-md-offset-4">{{title}}</h1>
+  	<div>
+  	  <div class="col-md-4">
+  	  	<div class="profile-pic-edit">
+    			<img src="{{ profile_imagen }}" alt="Your photo" class="img-circle profile_img">
+    			{% if current_user.filename %}
+    			<a class="col-md-offset-5 col-sm-12" href="{{ url_for('users.remove_profile_image', username=current_user.username) }}" title="Remove your portrait">Remove</a>
+    			{% endif %}
+    		</div>
+  		</div>
+      <div class="col-md-4">
+      	<p>All fields marked with * are required</p>
+          {{ wtf.quick_form(form, extra_classes="form-profile") }}
+      </div>
+    </div>
+  </div>
+{% endblock %}

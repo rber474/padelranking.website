@@ -1,0 +1,2 @@
+FLASK_APP=paddelranking.website
+FLASK_ENV=development

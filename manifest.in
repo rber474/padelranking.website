@@ -1,0 +1,5 @@
+recursive-include paddelranking *
+include paddelranking.website/paddelranking/website/schema.sql
+graft paddelranking.website/paddelranking/website/static
+graft paddelranking.website/paddelranking/website/templates
+global-exclude *.pyc
