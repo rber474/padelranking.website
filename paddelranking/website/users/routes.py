@@ -12,7 +12,7 @@ from paddelranking.website import portraits
 from paddelranking.website.utils import is_current_user
 from paddelranking.website.models import User, db, Tournament, Player
 from paddelranking.website.users import blueprint
-from paddelranking.website.users.forms import EditProfileForm, TournamentForm
+from paddelranking.website.users.forms import EditProfileForm, TournamentForm,  BaseTournamentForm
 
 def get_portrait_url():
     """ Gets the path to user's portrait image """
@@ -116,10 +116,7 @@ def utility_processor():
 def my_tournaments(username):
 
     user = User.query.filter_by(username=username).first_or_404()
-    tours = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
+    tours = Tournament.query.filter_by(createdby=current_user.id)
     return render_template('users/my_tournaments.html', user=user, tours=tours, title='My tournaments')
 
 @blueprint.route('/<username>/create-tournament.hmtl', methods=['POST', 'GET'])
@@ -128,12 +125,13 @@ def my_tournaments(username):
 def create_tournament(username):
 
     tour = Tournament()
-    form = TournamentForm(request.form)
+    #form = TournamentForm(request.form)
+    form = BaseTournamentForm(request.form)
 
     form.players.min_entries=4
 
     if form.add_player.data:
-        getattr(form,'players').append_entry()
+        getattr(form,'players_input').append_entry()
         return render_template('/users/create_tournament.html', title='Create new tournament', form=form)
 
     if form.is_submitted():
@@ -142,14 +140,22 @@ def create_tournament(username):
             return redirect(url_for('users.my_tournaments', username=username))
 
         if form.validate_on_submit():
+            newplayers = []
+            for newplayer in form.players_input.data:
+                if newplayer.get('playername'):
+                    player = Player(**newplayer)
+
+                    player.createdby = current_user.id
+                    newplayers.append(player)
 
             form.populate_obj(tour)
             tour.closed = False
-
-            
+            tour.players.extend(newplayers)
+            tour.createdby = current_user.id
             db.session.add(tour)
             db.session.commit()
             flash('Changes saved!')
+            return redirect(url_for('users.my_tournaments', username=username))
 
         if form.errors:
             flash('Please, correct errors found!')
@@ -162,6 +168,6 @@ def create_tournament(username):
 def add_player(username):
 
     form = TournamentForm()
-    getattr(form,'players').append_entry()
+    getattr(form,'players_input').append_entry()
 
     return render_template('/users/players.html', form=form)

@@ -22,12 +22,18 @@
     	{{title}}
     	<span class="pull-right"><a href="{{url_for('users.create_tournament', username=current_user.username)}}" title="Create new tournament"><i class="fa fa-plus-circle"></i></span>
     </h1>
-		<div class="panel panel-success">
+    {% for tour in tours %}
+    {% set is_closed = tour.closed %}
+		<div class="panel {% if not is_closed %}panel-success{% else %} panel-danger{% endif %}">
 		  <!-- Default panel contents -->
 		  <div class="panel-heading">
-		  	<h2 class="panel-title">Tournament #1</h2>
-		  	<span>05/04/1974</span>
+		  	<h2 class="panel-title">{{ tour.name }}</h2>
+		  	<span>{{ tour.created }}</span>
+		  	{% if not is_closed %}
 		  	<span class="label label-success pull-right">Playing now...</span>
+		  	{% else %}
+		  	<span class="label label-danger pull-right">Finished</span>
+		  	{% endif %}
 		  </div>
 		  <!-- Table -->
 			<table class="table table-hover table-striped">
@@ -82,6 +88,7 @@
 				</tbody>
 			</table>
 		</div>
+		{% endfor %}
 		<!-- closed tour -->
 		<div class="panel panel-default">
 		  <!-- Default panel contents -->

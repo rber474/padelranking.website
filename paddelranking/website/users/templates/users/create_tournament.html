@@ -61,12 +61,12 @@
           </div>
           <fieldset class="form-group"aria-labelledby="players_fieldset">
             <span id="players_fieldset" class="h3">Players</span>
+            
             <div class="form-row">
-            {{ form.player_list.label }} {{ form.player_list(class="form-control") }}
+            {{ form.players.label }} {{ form.players(class="form-control") }}
             </div>
-
+            
             <span id="players">{% include '/users/players.html' %}</span>
-
             <div class="form-row">
                 {{ form.add_player(id="add-player", class="btn btn-success") }}
             </div>

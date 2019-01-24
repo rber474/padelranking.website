@@ -21,8 +21,9 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(120), index=False, unique=False)
     surname1 = db.Column(db.String(120), index=False, unique=False)
     surname2 = db.Column(db.String(120), index=False, unique=False)
-    players = db.relationship('Player', backref='aliases', lazy='dynamic')
-    players_created = db.relationship('Player', backref='owner', lazy='dynamic')
+    players = db.relationship('Player', backref='aliases', lazy='dynamic', foreign_keys='Player.userid')
+    players_created = db.relationship('Player', backref='owner', lazy='dynamic', foreign_keys='Player.createdby')
+    tournaments = db.relationship('Tournament', backref='userid', lazy='dynamic', foreign_keys='Tournament.createdby')
 
     last_login = db.Column(db.DateTime, index=False)
     register_date = db.Column(db.DateTime, index=False)
@@ -59,8 +60,7 @@ class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     playername = db.Column(db.String(64), index=True, unique=False)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'))
-    tournament_id =  db.Column(db.Integer(), db.ForeignKey('tournament.id'))
-    createdby = db.relationship(User, foreign_keys=userid, backref='owner', lazy='dynamic', uselist=True) 
+    createdby = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return '<Player {} from user {}>'.format(self.playername, self.userid) 
@@ -89,13 +89,13 @@ class Tournament(db.Model):
     rounds_qty = db.Column(db.Integer, default=3)
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     closed = db.Column(db.Boolean)
+    createdby = db.Column(db.Integer, db.ForeignKey('user.id'))
     matches = db.relationship('Match', backref='tournament', lazy=True)
     rounds = db.relationship('Round', backref='tournament', lazy=True)
-    #players = db.relationship('Player', secondary=PlayersByTournament,
-    #                primaryjoin=(PlayersByTournament.c.player_id == id),
-    #                lazy='dynamic',
-    #                backref=db.backref('tournaments', lazy='dynamic'))
-    players = db.relationship('Player', lazy='dynamic', backref='tournament')
+    players = db.relationship('Player', secondary=PlayersByTournament,
+                    primaryjoin=(PlayersByTournament.c.tournament_id == id),
+                    lazy='dynamic',
+                    backref=db.backref('tournaments', lazy='dynamic'))
 
     def __repr__(self):
         return '<Tournament {}>'.format(self.id)

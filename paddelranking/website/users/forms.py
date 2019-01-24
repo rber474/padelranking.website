@@ -46,9 +46,7 @@ class PlayersForm(ModelForm):
 
     playername = StringField('Player Nick',
             description="Please, provide a nick lower than 64 characters.",
-            validators=[DataRequired(), Length(max=64)])
-    if current_user and current_user.is_authenticated():
-        createdby = IntegerField(default=current_user.get_id())
+            validators=[Length(max=64)])
 
     class Meta:
         # No need for csrf token in this child form
@@ -56,7 +54,7 @@ class PlayersForm(ModelForm):
         model = Player
 
 def possible_players():
-    return Player.query
+    return Player.query.filter_by(createdby=current_user.id)
 
 
 class TournamentForm(ModelForm):
@@ -78,3 +76,15 @@ class TournamentForm(ModelForm):
 
     class Meta:
         model = Tournament
+
+class BaseTournamentForm(ModelForm):
+    class Meta:
+        model = Tournament
+
+    submit = SubmitField('Save')
+    cancel = SubmitField('Cancel')
+
+    name = StringField('Tournament Title',validators=[DataRequired()])
+    players = QuerySelectMultipleField('Select the players...',query_factory=possible_players, get_label='playername')
+    players_input = ModelFieldList(FormField(PlayersForm), label="Player", min_entries=1)
+    add_player = SubmitField('Add Player')
