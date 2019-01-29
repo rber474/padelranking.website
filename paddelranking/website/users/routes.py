@@ -4,6 +4,7 @@ import functools
 from flask import (
     flash, g, redirect, render_template, request, url_for, current_app
 )
+from flask_babel import _
 from werkzeug.exceptions import abort
 from werkzeug import secure_filename
 from flask_login import login_required, current_user
@@ -12,7 +13,7 @@ from paddelranking.website import portraits
 from paddelranking.website.utils import is_current_user
 from paddelranking.website.models import User, db, Tournament, Player
 from paddelranking.website.users import blueprint
-from paddelranking.website.users.forms import EditProfileForm, TournamentForm,  BaseTournamentForm
+from paddelranking.website.users.forms import EditProfileForm, BaseTournamentForm
 
 def get_portrait_url():
     """ Gets the path to user's portrait image """
@@ -52,7 +53,7 @@ def edit_profile(username):
     form = EditProfileForm(obj=user)
     if form.is_submitted():
         if form.cancel.data:
-            flash('Changes canceled!')
+            flash(_('Changes canceled!'))
             return redirect(url_for('users.user', username=username))
 
         if form.validate_on_submit():
@@ -74,12 +75,12 @@ def edit_profile(username):
                     user.filename = filename
                 db.session.add(user)
                 db.session.commit()
-                flash('Changes saved!')
+                flash(_('Changes saved!'))
 
         if form.errors:
-            flash('Please, correct errors found!')
+            flash(_('Please, correct errors found!'))
 
-    return render_template('/users/edit_profile.html', title='Edit my profile', form=form, filename=user.filename)
+    return render_template('/users/edit_profile.html', title=_('Edit my profile'), form=form, filename=user.filename)
 
 @blueprint.route('/<username>/profile/delete', methods=('GET',))
 @login_required
@@ -116,7 +117,7 @@ def utility_processor():
 def my_tournaments(username):
 
     user = User.query.filter_by(username=username).first_or_404()
-    tours = Tournament.query.filter_by(createdby=current_user.id)
+    tours = Tournament.query.filter_by(createdby=current_user.id).order_by(Tournament.closed,Tournament.created.desc())
     return render_template('users/my_tournaments.html', user=user, tours=tours, title='My tournaments')
 
 @blueprint.route('/<username>/create-tournament.hmtl', methods=['POST', 'GET'])
@@ -125,7 +126,6 @@ def my_tournaments(username):
 def create_tournament(username):
 
     tour = Tournament()
-    #form = TournamentForm(request.form)
     form = BaseTournamentForm(request.form)
 
     form.players.min_entries=4

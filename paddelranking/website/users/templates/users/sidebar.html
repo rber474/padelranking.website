@@ -28,16 +28,16 @@
     <div class="menu_section">
       <h3>General</h3>
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa fa-home"></i>{{ _('Home') }}<span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="{{url_for('index')}}">Home</a></li>
-            <li><a href="{{url_for('users.edit_profile', username=current_user.username)}}">Edit my profile</a></li>
+            <li><a href="{{ url_for('users.user', username=current_user.username) }}">{{ _('Back to home') }}</a></li>
+            <li><a href="{{url_for('users.edit_profile', username=current_user.username)}}">{{ _('Edit my profile') }}</a></li>
           </ul>
         </li>
-        <li><a><i class="fa fa-edit"></i> Tournaments <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa fa-edit"></i>{{ _('Tournaments') }}<span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="{{url_for('users.create_tournament', username=current_user.username)}}">New tournament</a></li>
-            <li><a href="{{url_for('users.my_tournaments', username=current_user.username)}}">All my tournaments</a></li>
+            <li><a href="{{url_for('users.create_tournament', username=current_user.username)}}">{{ _('New tournament') }}</a></li>
+            <li><a href="{{url_for('users.my_tournaments', username=current_user.username)}}">{{ _('My tournaments') }}</a></li>
           </ul>
         </li>
         <li><a><i class="fa fa-bar-chart-o"></i> Stats <span class="fa fa-chevron-down"></span></a>

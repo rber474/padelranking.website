@@ -1,0 +1,60 @@
+# Translations template for PROJECT.
+# Copyright (C) 2019 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2019-01-29 00:58+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: paddelranking/website/users/routes.py:56
+msgid "Changes canceled!"
+msgstr ""
+
+#: paddelranking/website/users/routes.py:78
+msgid "Changes saved!"
+msgstr ""
+
+#: paddelranking/website/users/routes.py:81
+msgid "Please, correct errors found!"
+msgstr ""
+
+#: paddelranking/website/users/routes.py:83
+#: paddelranking/website/users/templates/users/sidebar.html:34
+msgid "Edit my profile"
+msgstr ""
+
+#: paddelranking/website/users/templates/users/my_tournaments.html:23
+msgid "Create new tournament"
+msgstr ""
+
+#: paddelranking/website/users/templates/users/sidebar.html:31
+msgid "Home"
+msgstr ""
+
+#: paddelranking/website/users/templates/users/sidebar.html:33
+msgid "Back to home"
+msgstr ""
+
+#: paddelranking/website/users/templates/users/sidebar.html:37
+msgid "Tournaments"
+msgstr ""
+
+#: paddelranking/website/users/templates/users/sidebar.html:39
+msgid "New tournament"
+msgstr ""
+
+#: paddelranking/website/users/templates/users/sidebar.html:40
+msgid "My tournaments"
+msgstr ""
+

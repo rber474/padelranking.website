@@ -1,15 +1,17 @@
 import os
 from flask import Flask
 import flask_resize
+from flask_babel import Babel
+from flask_uploads import (UploadSet, configure_uploads, IMAGES)
 
 from importlib import import_module
-from flask_uploads import (UploadSet, configure_uploads, IMAGES)
 
 from sqlalchemy.engine import Engine 
 from sqlalchemy import event
 
-from paddelranking.website.config import FlaskUploadConfig, FlaskResizeConfig
+from paddelranking.website.config import Config, FlaskUploadConfig, FlaskResizeConfig
 
+babel = Babel()
 
 photos = UploadSet('photos', IMAGES)
 portraits = UploadSet('portraits', IMAGES)
@@ -26,6 +28,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
 
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -35,6 +38,9 @@ def create_app(test_config=None):
         'sqlite:///' + os.path.join(app.instance_path, 'paddelranking.sqlite'),
         SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
+
+    app.config.from_object(Config)
+    
     # Database models
     from .models import (db, migrate, User, Team, login_manager,
                          Player, Tournament, Round, Match, MatchResultsByTeam,
@@ -45,6 +51,9 @@ def create_app(test_config=None):
     # Flask Resize
     app.config.from_object(FlaskResizeConfig)
     resize = flask_resize.Resize(app)
+
+    # Flask Babel, i18n
+    babel.init_app(app)
 
     # Flask Login
     login_manager.init_app(app)
@@ -93,4 +102,6 @@ def create_app(test_config=None):
 
     configure_uploads(app, (photos, portraits))
 
+    with app.app_context():
+        from . import filtros
     return app

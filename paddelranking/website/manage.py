@@ -1,7 +1,8 @@
 from flask_script import Manager
 from flask_migrate import MigrateCommand
 import models
-import pdb; pdb.set_trace()
+
+
 from . import create_app
 
 

@@ -1,6 +1,7 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, FieldList, FormField
+from wtforms import StringField, SubmitField, FieldList, FormField
+from wtforms.fields.html5 import IntegerField
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from wtforms.validators import ValidationError, DataRequired, Email, Length
 from flask_wtf.file import FileField, FileAllowed, FileRequired
@@ -56,27 +57,6 @@ class PlayersForm(ModelForm):
 def possible_players():
     return Player.query.filter_by(createdby=current_user.id)
 
-
-class TournamentForm(ModelForm):
-    """ Create or edit tournament"""
-
-
-    name = StringField('Tournament Title',validators=[DataRequired()])
-    point_per_match = IntegerField('Points per match', validators=[DataRequired()], default=100)
-    match_per_round = IntegerField('Matchs per round', validators=[DataRequired()], default=3)
-    rounds_qty = IntegerField('Rounds', validators=[DataRequired()], default=3)
-
-    player_list = QuerySelectMultipleField('Select the players...',query_factory=possible_players, get_label='playername')
-
-    players = ModelFieldList(FormField(PlayersForm), label="Player", min_entries=1)
-    add_player = SubmitField('Add Player')
-
-    submit = SubmitField('Save')
-    cancel = SubmitField('Cancel')
-
-    class Meta:
-        model = Tournament
-
 class BaseTournamentForm(ModelForm):
     class Meta:
         model = Tournament
@@ -85,6 +65,9 @@ class BaseTournamentForm(ModelForm):
     cancel = SubmitField('Cancel')
 
     name = StringField('Tournament Title',validators=[DataRequired()])
+    point_per_match = IntegerField('Points per match', validators=[DataRequired()], default=100)
+    match_per_round = IntegerField('Matches per round', validators=[DataRequired()], default=3)
+    rounds_qty = IntegerField('Rounds', validators=[DataRequired()], default=3)
     players = QuerySelectMultipleField('Select the players...',query_factory=possible_players, get_label='playername')
     players_input = ModelFieldList(FormField(PlayersForm), label="Player", min_entries=1)
     add_player = SubmitField('Add Player')
