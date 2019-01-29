@@ -2,7 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
-    LANGUAGES = ['en', 'es']
+    LANGUAGES = ['es', 'en']
 
 class FlaskUploadConfig(object):
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
