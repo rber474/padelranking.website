@@ -11,7 +11,7 @@ from flask_login import login_required, current_user
 
 from paddelranking.website import portraits
 from paddelranking.website.utils import is_current_user
-from paddelranking.website.models import User, db, Tournament, Player
+from paddelranking.website.models import User, db, Tournament, Player, Match, Round
 from paddelranking.website.users import blueprint
 from paddelranking.website.users.forms import EditProfileForm, BaseTournamentForm
 
@@ -171,3 +171,12 @@ def add_player(username):
     getattr(form,'players_input').append_entry()
 
     return render_template('/users/players.html', form=form)
+
+@blueprint.route('/<username>/tour-<int:id>.hmtl', methods=['POST', 'GET'])
+@login_required
+@is_current_user
+def tournament(username, id):
+    user = User.query.filter_by(username=username).first_or_404()
+    tour = Tournament.query.filter_by(id=id).first_or_404()
+
+    return render_template('users/tournament.html', user=user, tour=tour)

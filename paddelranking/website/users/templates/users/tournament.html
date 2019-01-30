@@ -1,0 +1,66 @@
+{% extends "base_dashboard.html" %}
+{% block styles%}
+  {{ super() }}
+  <link href="{{ url_for('static', filename='build/css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+	<div class="right_col" role="main">
+    {% block messages %}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+              {% else %}
+              <div class="alert alert-info" role="alert">{{ message }}</div>
+              {% endif %}
+          {% endfor %}
+      {% endif %}
+      {% endwith %}
+    {% endblock messages %}
+    {% set is_closed = tour.closed %}
+	  <div class="row tile_count">
+      <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-users"></i> {{_('Total Players')}}</span>
+        <div class="count {% if not is_closed %}text-success{% else %} text-danger{% endif %}">{{tour.players.count()}}</div>
+      </div>
+      <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> {{_('Rounds')}}</span>
+        <div class="count {% if not is_closed %}text-success{% else %} text-danger{% endif %}">{{ tour.rounds_qty }}</div>
+      </div>
+      <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-pencil"></i> {{_('Matches per round')}}</span>
+        <div class="count {% if not is_closed %}text-success{% else %} text-danger{% endif %}">{{tour.match_per_round}}</div>
+      </div>
+      <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-pencil"></i> {{_('Points per match')}}</span>
+        <div class="count {% if not is_closed %}text-success{% else %} text-danger{% endif %}">{{tour.point_per_match}}</div>
+      </div>
+    </div>
+    <h1 class="col-md-offset-3">{{ tour.name }} <small>{{ tour.created | datetime('short') }}</small></h1>
+    <div class="row">
+	    
+			<div class="panel {% if not is_closed %}panel-success{% else %} panel-danger{% endif %}">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">
+			  	<h2 class="panel-title"><i class="fa fa-users"></i> {{ _("Players") }}</h2>
+			  </div>
+			  {% include "users/players_table.html" %}
+			</div>
+			<div class="panel {% if not tour.matches %}panel-danger{% else %} panel-success{% endif %}">
+			  <div class="panel-heading">
+			    <h2 class="panel-title"><i class="fa fa-calendar"></i> {{_('Matches')}}</h2>
+			  </div>
+			  <div class="panel-body">
+			    {% if not tour.matches %}
+			    	<p>{{_("You haven't created the matches yet.")}}</p>
+			    	<div>
+			    		<a class="btn btn-primary" role="button" href="#" alt="{{_('Generate all matches')}}"><i class="fa fa-plus-circle"></i> {{_('Create them!')}}</a>
+			      </div>
+			    {% endif%}
+			  </div>
+			</div>
+		</div>
+
+  </div>
+{% endblock content %}
