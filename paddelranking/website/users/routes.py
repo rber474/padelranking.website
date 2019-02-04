@@ -239,8 +239,10 @@ def utility_processor():
     def team_players(teamid):
         team = Team.query.get(teamid)
         player1 = Player.query.get(team.player1)
-        player2 = Player.query.get(team.player2)
-        return (player1, player2)
+        player2 = Player.query.get(team.player2 or '')
+        if player2:
+            return (player1, player2)
+        return player1,
     return dict(team_players=team_players)
 
 @blueprint.context_processor

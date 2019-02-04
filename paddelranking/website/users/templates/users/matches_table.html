@@ -36,32 +36,36 @@
 									{% set players = team_players(match.team1) %}
 									{% set matchpoints = match_points(match.id,match.team1)%}
 									{% for player in players %}
+									{% if player %}
 									<tr>
 										<td class="col-md-4">{{player.playername}}</td>
 										{% if loop.index == 1 %}
-										<td class="col-md-1 text-center bg-danger" rowspan="2">{{matchpoints.set1}}</td>
-										<td class="col-md-1 text-center bg-danger" rowspan="2">{{matchpoints.set2}}</td>
-										<td class="col-md-1 text-center bg-danger" rowspan="2">{{matchpoints.set3}}</td>
+										<td class="col-md-1 text-center bg-danger" {% if players|length >1 %} rowspan="2"{% endif %}>{{matchpoints.set1}}</td>
+										<td class="col-md-1 text-center bg-danger" {% if players|length >1 %} rowspan="2"{% endif %}>{{matchpoints.set2}}</td>
+										<td class="col-md-1 text-center bg-danger" {% if players|length >1 %} rowspan="2"{% endif %}>{{matchpoints.set3}}</td>
 										{% endif %}
 										<td class="col-md-1 visible-md visible-lg text-center">5</td>
 										<td class="col-md-2 text-center">4</td>
 										<td class="col-md-2 text-center">4</td>
 									</tr>
+									{% endif  %}
 									{% endfor %}
 									{% set players = team_players(match.team2) %}
 									{% set matchpoints = match_points(match.id,match.team2)%}
 									{% for player in players %}
+									{% if player %}
 									<tr>
 										<td class="col-md-4">{{player.playername}}</td>
 										{% if loop.index == 1 %}
-										<td class="col-md-1 text-center bg-danger" rowspan="2">{{matchpoints.set1}}</td>
-										<td class="col-md-1 text-center bg-danger" rowspan="2">{{matchpoints.set2}}</td>
-										<td class="col-md-1 text-center bg-danger" rowspan="2">{{matchpoints.set3}}</td>
+										<td class="col-md-1 text-center bg-danger" {% if players|length>1 %} rowspan="2"{% endif %}>{{matchpoints.set1}}</td>
+										<td class="col-md-1 text-center bg-danger" {% if players|length>1 %} rowspan="2"{% endif %}>{{matchpoints.set2}}</td>
+										<td class="col-md-1 text-center bg-danger" {% if players|length>1 %} rowspan="2"{% endif %}>{{matchpoints.set3}}</td>
 										{% endif %}
 										<td class="col-md-1 visible-md visible-lg text-center">5</td>
 										<td class="col-md-2 text-center">4</td>
 										<td class="col-md-2 text-center">4</td>
 									</tr>
+									{% endif %}
 									{% endfor %}
 								</tbody>
 							</table>
