@@ -104,9 +104,10 @@ class Tournament(db.Model):
 class Round(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tour = db.Column(db.Integer, db.ForeignKey('tournament.id'),
-        primary_key=True)
-    date = db.Column(db.DateTime, index=True)
-
+        )
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    matches = db.relationship('Match', backref='round',
+        lazy='dynamic')
     def __repr__(self):
         return '<Round {} for Tournament {}>'.format(self.id, self.tour)
 
@@ -120,7 +121,7 @@ class Match(db.Model):
     roundid = db.Column(db.Integer, db.ForeignKey('round.id'))
     doubles = db.Column(db.Boolean, default=True)
     order = db.Column(db.Integer)
-    played = db.Column(db.Boolean, default=True)
+    played = db.Column(db.Boolean, default=False)
     results = db.relationship('MatchResultsByTeam', backref='match',
         lazy='dynamic')
 
@@ -134,9 +135,8 @@ class Match(db.Model):
 
 class MatchResultsByTeam(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    match_id = db.Column(db.Integer, db.ForeignKey('match.id'),
-        primary_key=True)
-    team = db.Column(db.Integer, db.ForeignKey('team.id'), primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'))
+    team = db.Column(db.Integer, db.ForeignKey('team.id'))
     set1 = db.Column(db.Integer)
     set2 = db.Column(db.Integer)
     set3 = db.Column(db.Integer)

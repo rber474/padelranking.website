@@ -10,10 +10,10 @@ from werkzeug import secure_filename
 from flask_login import login_required, current_user
 
 from paddelranking.website import portraits
-from paddelranking.website.utils import is_current_user
-from paddelranking.website.models import User, db, Tournament, Player, Match, Round
+from paddelranking.website.utils import is_current_user, fixtures
+from paddelranking.website.models import User, db, Tournament, Player, Match, Round, Team, MatchResultsByTeam
 from paddelranking.website.users import blueprint
-from paddelranking.website.users.forms import EditProfileForm, BaseTournamentForm
+from paddelranking.website.users.forms import EditProfileForm, BaseTournamentForm, MatchPointsForm
 
 def get_portrait_url():
     """ Gets the path to user's portrait image """
@@ -178,5 +178,74 @@ def add_player(username):
 def tournament(username, id):
     user = User.query.filter_by(username=username).first_or_404()
     tour = Tournament.query.filter_by(id=id).first_or_404()
+    form = MatchPointsForm()
 
-    return render_template('users/tournament.html', user=user, tour=tour)
+    return render_template('users/tournament.html', user=user, tour=tour, form=form)
+
+
+@blueprint.route('/<username>/tour-<int:id>/create-matches', methods=['POST', 'GET'])
+@login_required
+@is_current_user
+def create_matches(username, id):
+    tour = Tournament.query.filter_by(id=id).first_or_404()
+    user = User.query.filter_by(username=username).first_or_404()
+    players = tour.players.all()
+    rounds = tour.rounds_qty
+    matches_per_round = tour.match_per_round
+
+    single_matches = list(fixtures(players))
+
+    is_singles=False
+    if len(single_matches[0]) % 2:
+        is_singles = True
+    for single_match in single_matches:
+        round = Round(tour=tour.id)
+
+        db.session.add(round)
+        db.session.commit()
+
+        round_id = round.id
+        if not is_singles:
+            p1, p2 = single_match[0]
+            p3, p4 = single_match[1]
+            team1 = Team(player1=p1.id, player2=p2.id)
+            team2 = Team(player1=p3.id, player2=p4.id)
+        else:
+            player1, player2 = single_match[0]
+            team1 = Team(player1=player1.id)
+            team2 = Team(player1=player2.id)
+        db.session.add_all([team1, team2])
+        db.session.commit()
+        for idx in range(matches_per_round):
+            
+            data = {
+                'tour': tour.id,
+                'team1': team1.id,
+                'team2': team2.id,
+                'roundid': round_id,
+                'order': idx+1,
+            }
+            if is_singles:
+                data['doubles'] = False
+            match = Match(**data)
+            db.session.add(match)
+            db.session.commit()
+
+    flash(_('All matches created.'))
+    return redirect(url_for('users.tournament', username=current_user.username, id=tour.id))
+
+@blueprint.context_processor
+def utility_processor():
+    def team_players(teamid):
+        team = Team.query.get(teamid)
+        player1 = Player.query.get(team.player1)
+        player2 = Player.query.get(team.player2)
+        return (player1, player2)
+    return dict(team_players=team_players)
+
+@blueprint.context_processor
+def utility_processor():
+    def match_points(matchid, teamid):
+        points = MatchResultsByTeam.query.filter_by(match_id=matchid,team=teamid).first()
+        return points
+    return dict(match_points=match_points)

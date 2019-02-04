@@ -55,9 +55,26 @@
 			    {% if not tour.matches %}
 			    	<p>{{_("You haven't created the matches yet.")}}</p>
 			    	<div>
-			    		<a class="btn btn-primary" role="button" href="#" alt="{{_('Generate all matches')}}"><i class="fa fa-plus-circle"></i> {{_('Create them!')}}</a>
+			    		<a class="btn btn-primary" role="button" 
+                href="{{ url_for('users.create_matches', username=current_user.username, id=tour.id) }}" 
+                alt="{{_('Generate all matches')}}"><i class="fa fa-plus-circle"></i> {{_('Create them!')}}</a>
 			      </div>
 			    {% endif%}
+          {% if tour.matches %}
+            <ul class="nav nav-tabs">
+            {% for round in tour.rounds %}
+              <li role="presentation" {% if loop.first %} class="active" {% endif %}><a href="#content-round-{{round.id}}" aria-controls="content-round-{{round.id}}" role="tab" data-toggle="tab">{{_('Round {}'.format(loop.index)) }}</a></li>
+            {% endfor%}
+            </ul>
+            <div class="tab-content">
+            {% for round in tour.rounds %}
+              <div role="tabpanel" {% if loop.first %} class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif %}  id="content-round-{{round.id}}">
+                <h3>{{_('Round {}'.format(loop.index)) }}</h3>
+                {% include "users/matches_table.html" %}  
+              </div>
+            {% endfor%}
+            </div>
+          {% endif%}
 			  </div>
 			</div>
 		</div>

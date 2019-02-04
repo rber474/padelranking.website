@@ -1,5 +1,6 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
+
 from wtforms import StringField, SubmitField, FieldList, FormField
 from wtforms.fields.html5 import IntegerField
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
@@ -8,9 +9,9 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 from sqlalchemy.sql.expression import not_
 
 from paddelranking.website import portraits
-from paddelranking.website.models import User, db, Tournament, Player
+from paddelranking.website.models import User, db, Tournament, Player, MatchResultsByTeam, Match
 
-from wtforms_alchemy import ModelForm, ModelFormField, model_form_factory, ModelFieldList
+from wtforms_alchemy import ModelForm as SQLModelForm, ModelFormField, model_form_factory, ModelFieldList
 
 BaseModelForm = model_form_factory(FlaskForm)
 
@@ -71,3 +72,13 @@ class BaseTournamentForm(ModelForm):
     players = QuerySelectMultipleField('Select the players...',query_factory=possible_players, get_label='playername')
     players_input = ModelFieldList(FormField(PlayersForm), label="Player", min_entries=1)
     add_player = SubmitField('Add Player')
+
+
+class MatchPointsForm(ModelForm):
+    """ Create a list of players """
+
+    class Meta:
+        # No need for csrf token in this child form
+        # csrf = False
+        model = MatchResultsByTeam
+

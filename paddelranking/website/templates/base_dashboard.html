@@ -13,7 +13,7 @@
        
       <title>
       {% block title %}
-          {% if title %}{{ title }} - PaddelRanking{% else %}Welcome to PaddelRanking{% endif %}
+          {% if title %}{{ title }} - PaddelRanking{% else %}{{_('Welcome to')}} PaddelRanking{% endif %}
       {% endblock %}
       </title>
       {% block stylesheets %}
