@@ -1,5 +1,9 @@
 <div class="row">
 {% for match in round.matches %}
+	{% set players1 = team_players(match.team1) %}
+	{% set mpoints = match_points(match.id,match.team1)%}
+	{% set players2 = team_players(match.team2) %}
+	{% set mpoints2 = match_points(match.id,match.team2)%}
     <div class="col-md-6 col-sm-12 col-xs-12">
         <div class="x_panel tile">
             <div class="x_title">
@@ -7,13 +11,10 @@
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <a href="{{url_for('users.edit_match', username=current_user.username, tourid=tour.id, matchid=match.id)}}" title="{{_('Edit the match ')}}" 
+                         role="button">
                             <i class="fa fa-wrench"></i>
                         </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Settings 1</a></li>
-                            <li><a href="#">Settings 2</a></li>
-                        </ul>
                     </li>
                     <li><a class="close-link"><i class="fa fa-close"></i></a></li>
                 </ul>
@@ -22,7 +23,7 @@
             <div class="x_content">
 							<table class="table table-hover table-striped">
 								<thead>
-									<tr class="bg-primary">
+									<tr>
 										<th class="text-center">Teams / Players</th>
 										<th class="text-center">SET 1</th>
 										<th class="text-center">SET 2</th>
@@ -33,37 +34,33 @@
 									</tr>
 								</thead>
 								<tbody>
-									{% set players = team_players(match.team1) %}
-									{% set matchpoints = match_points(match.id,match.team1)%}
-									{% for player in players %}
+									{% for player in players1 %}
 									{% if player %}
 									<tr>
-										<td class="col-md-4">{{player.playername}}</td>
+										<td class="col-md-4">{{player.playername}} {% if mpoints.winner %}<i class="fa fa-trophy pull-right">{%endif%}</td>
 										{% if loop.index == 1 %}
-										<td class="col-md-1 text-center bg-danger" {% if players|length >1 %} rowspan="2"{% endif %}>{{matchpoints.set1}}</td>
-										<td class="col-md-1 text-center bg-danger" {% if players|length >1 %} rowspan="2"{% endif %}>{{matchpoints.set2}}</td>
-										<td class="col-md-1 text-center bg-danger" {% if players|length >1 %} rowspan="2"{% endif %}>{{matchpoints.set3}}</td>
+										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set1 > mpoints2.set1 %} text-success {% else %}text-danger{% endif%}" {% if players1|length >1 %} rowspan="2"{% endif %}>{{mpoints.set1}}</td>
+										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set2 > mpoints2.set2 %} text-success {% else %}text-danger{% endif%}" {% if players1|length >1 %} rowspan="2"{% endif %}>{{mpoints.set2}}</td>
+										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set3 > mpoints2.set3 %} text-success {% else %}text-danger{% endif%}" {% if players1|length >1 %} rowspan="2"{% endif %}>{{mpoints.set3}}</td>
 										{% endif %}
 										<td class="col-md-1 visible-md visible-lg text-center">5</td>
-										<td class="col-md-2 text-center">4</td>
-										<td class="col-md-2 text-center">4</td>
+										<td class="col-md-2 text-center">{{mpoints.gamepoints}}</td>
+										<td class="col-md-2 text-center">{{mpoints.matchpoints}}</td>
 									</tr>
 									{% endif  %}
 									{% endfor %}
-									{% set players = team_players(match.team2) %}
-									{% set matchpoints = match_points(match.id,match.team2)%}
-									{% for player in players %}
+									{% for player in players2 %}
 									{% if player %}
 									<tr>
-										<td class="col-md-4">{{player.playername}}</td>
+										<td class="col-md-4 col-xs-6">{{player.playername}} {% if mpoints2.winner %}<i class="fa fa-trophy pull-right">{%endif%}</td>
 										{% if loop.index == 1 %}
-										<td class="col-md-1 text-center bg-danger" {% if players|length>1 %} rowspan="2"{% endif %}>{{matchpoints.set1}}</td>
-										<td class="col-md-1 text-center bg-danger" {% if players|length>1 %} rowspan="2"{% endif %}>{{matchpoints.set2}}</td>
-										<td class="col-md-1 text-center bg-danger" {% if players|length>1 %} rowspan="2"{% endif %}>{{matchpoints.set3}}</td>
+										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set1 < mpoints2.set1 %} text-success {% else %}text-danger{% endif%}" {% if players2|length>1 %} rowspan="2"{% endif %}>{{mpoints2.set1}}</td>
+										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set2 < mpoints2.set2 %} text-success {% else %}text-danger{% endif%}" {% if players2|length>1 %} rowspan="2"{% endif %}>{{mpoints2.set2}}</td>
+										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set3 < mpoints2.set3 %} text-success {% else %}text-danger{% endif%}" {% if players2|length>1 %} rowspan="2"{% endif %}>{{mpoints2.set3}}</td>
 										{% endif %}
 										<td class="col-md-1 visible-md visible-lg text-center">5</td>
-										<td class="col-md-2 text-center">4</td>
-										<td class="col-md-2 text-center">4</td>
+										<td class="col-md-2 text-center">{{mpoints2.gamepoints}}</td>
+										<td class="col-md-2 text-center">{{mpoints2.matchpoints}}</td>
 									</tr>
 									{% endif %}
 									{% endfor %}

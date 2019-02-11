@@ -1,3 +1,6 @@
+@-moz-document url-prefix() {
+  fieldset { display: table-cell; }
+}
 
 html , body{
 	
@@ -4164,6 +4167,10 @@ ul.notifications {
     border: 1px solid #e5e5e5
 }
 
+.centered {
+    vertical-align: middle !important;
+    font-weight: bold;
+}
 /*
 .x_content {
     direction: rtl;

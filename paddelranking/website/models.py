@@ -2,6 +2,7 @@ from datetime import datetime
 from hashlib import md5
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -62,6 +63,10 @@ class Player(db.Model):
     userid = db.Column(db.Integer, db.ForeignKey('user.id'))
     createdby = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    teams = db.relationship('Team', primaryjoin="or_(Player.id==Team.player1, Player.id==Team.player2)", lazy='dynamic')
+
+
+
     def __repr__(self):
         return '<Player {} from user {}>'.format(self.playername, self.userid) 
 
@@ -70,10 +75,14 @@ class Team(db.Model):
     player1 = db.Column(db.Integer, db.ForeignKey('player.id'))
     player2 = db.Column(db.Integer, db.ForeignKey('player.id'))
 
+    matches = db.relationship('Match', primaryjoin="or_(Team.id==Match.team1, Team.id==Match.team2)", lazy='dynamic')
+
     def __repr__(self):
         return '<Team {} - Player 1: {} - Player 2: {}>'.format(self.id,
                                                                 self.player1,
                                                                 self.player2)
+
+
 
 PlayersByTournament = db.Table('PlayersByTournament',
     db.Column('tournament_id',db.Integer, db.ForeignKey('tournament.id'), primary_key=True),
@@ -134,13 +143,31 @@ class Match(db.Model):
                                                         self.tour)
 
 class MatchResultsByTeam(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    match_id = db.Column(db.Integer, db.ForeignKey('match.id'))
-    team = db.Column(db.Integer, db.ForeignKey('team.id'))
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'),primary_key=True)
+    team = db.Column(db.Integer, db.ForeignKey('team.id'),primary_key=True)
     set1 = db.Column(db.Integer)
     set2 = db.Column(db.Integer)
     set3 = db.Column(db.Integer)
+    score = db.Column(db.Integer)
+    gamepoints = db.Column(db.Integer)
+    _matchpoints = db.Column(db.Integer)
+
     winner = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<MatchResults for team {}>'.format(self.team)
+
+    def get_score(self):
+        return dict(set1=self.set1, set2=self.set2, set3=self.set3)
+
+    @hybrid_property
+    def matchpoints(self):
+        return self._matchpoints
+
+    @matchpoints.setter
+    def matchpoints(self, value):
+        self._matchpoints = value
+        if value > 50:
+            self.winner = True
+        else:
+            self.winner = False

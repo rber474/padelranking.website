@@ -1,0 +1,74 @@
+{% extends "base_dashboard.html" %}
+{% block styles%}
+  {{ super() }}
+  <link href="{{ url_for('static', filename='build/css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+	<div class="row right_col" role="main">
+    {% block messages %}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+              {% else %}
+              <div class="alert alert-info" role="alert">{{ message }}</div>
+              {% endif %}
+          {% endfor %}
+      {% endif %}
+      {% endwith %}
+    {% endblock messages %}
+    <h1 class="col-md-offset-4">{{title}}</h1>
+  	<div>
+      <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">          
+        <form class="form"
+          method="POST" 
+          action="{{url_for('users.edit_match', username=current_user.username, tourid=tour.id, matchid=match.id)}}" id="main-form">
+          {{ form.hidden_tag() }}
+
+          <div class="form-group col-sm-12 col-xs-12">
+            {{ form.matchdate.label }} 
+            <div class="input-group datepicker1 {% if form.matchdate.errors %}has-error{% endif%}">
+              <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+              {{ form.matchdate(class="form-control") }}
+            </div>
+            {% if form.matchdate.errors %}
+              <div class="errors text-danger">{% for error in form.matchdate.errors %}<p>{{ error }}</p>{% endfor %}</div>
+            {% endif %}
+          </div>
+
+          {% for result in form.results %}    
+            <div class="form-row">
+        
+              <fieldset class="row form-group {% if form.results.errors %}has-error{% endif%}">
+                <legend class="col-md-12 ">
+
+                    {{ _('Team {}:').format(loop.index)  }}
+                    {% if loop.index == 1 %}
+                      {% set players = team_players(match.team1) %}
+                    {% else %}
+                      {% set players = team_players(match.team2) %}
+                    {% endif%}
+                    {% for player in players %}
+                      {% if player  %}
+                      <span>{% if players|length > 1 and loop.index > 1%} - {% endif %}{{player.playername}}</span>
+                      {% endif%}
+                    {% endfor %}
+                </legend>
+                {% for field in result %}
+                <div class="col-md-4 col-sm-4 col-xs-4">{{ field(class="form-control", placeholder=field.label.text, max=7, min=0) }}
+                  <div class="errors text-danger">{% for error in field.errors %}<p>{{ error }}</p>{% endfor %}</div>
+                </div>
+                
+                {% endfor %}
+              </fieldset>
+
+            </div>
+          {% endfor %}
+        <div class="form-group col-md-8 col-sm-12 col-xs-12">{{form.submit(class="btn btn-primary btn-lg")}} {{form.cancel(class="btn  btn-danger btn-lg")}}</div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

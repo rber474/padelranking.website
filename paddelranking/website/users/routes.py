@@ -13,7 +13,8 @@ from paddelranking.website import portraits
 from paddelranking.website.utils import is_current_user, fixtures
 from paddelranking.website.models import User, db, Tournament, Player, Match, Round, Team, MatchResultsByTeam
 from paddelranking.website.users import blueprint
-from paddelranking.website.users.forms import EditProfileForm, BaseTournamentForm, MatchPointsForm
+from paddelranking.website.users.forms import EditProfileForm, BaseTournamentForm, MatchPointsForm, MatchForm
+
 
 def get_portrait_url():
     """ Gets the path to user's portrait image """
@@ -178,10 +179,69 @@ def add_player(username):
 def tournament(username, id):
     user = User.query.filter_by(username=username).first_or_404()
     tour = Tournament.query.filter_by(id=id).first_or_404()
-    form = MatchPointsForm()
 
-    return render_template('users/tournament.html', user=user, tour=tour, form=form)
+    return render_template('users/tournament.html', user=user, tour=tour)
 
+@blueprint.route('/<username>/tour-<int:tourid>/match-<int:matchid>.hmtl', methods=['POST', 'GET'])
+@login_required
+@is_current_user
+def edit_match(username, tourid, matchid):
+    user = User.query.filter_by(username=username).first_or_404()
+    tour = Tournament.query.filter_by(id=tourid).first_or_404()
+    match = Match.query.filter_by(id=matchid).first_or_404()
+
+    results = match.results
+    form = MatchForm(request.form, obj=match, results=results.all())
+
+
+    if form.is_submitted():
+        if form.cancel.data:
+            flash('Changes canceled!')
+            return redirect(url_for('users.tournament', username=username, id=tour.id))
+
+        if form.validate_on_submit():
+            scores = []
+            teams = (match.team1, match.team2)
+
+            for idx, score in enumerate(form.results.data):
+                # Set score, game points and match points
+                gamepoints = 0
+                for key, value in score.items(): 
+                    gamepoints+= value>=6 and  value*2 or value
+                
+                score['gamepoints'] = gamepoints
+                if not results.all():
+                    matchresult = MatchResultsByTeam(**score)
+                    matchresult.match_id = match.id
+                    matchresult.team = teams[idx]
+                else:
+                    matchresult = results[idx]
+                    for key, value in score.items():
+                        setattr(matchresult, key, value)
+
+                scores.append(matchresult)
+
+
+            match.matchdate = form.matchdate.data
+            match.played = True
+            match.results.extend(scores)
+            import pdb; pdb.set_trace()
+            games = match.results.all()
+            score1 = games[0]
+            score2 = games[1]
+            
+            score1.matchpoints = round(score1.gamepoints / (score1.gamepoints+score2.gamepoints)*tour.point_per_match)
+            score2.matchpoints = round(score2.gamepoints / (score1.gamepoints+score2.gamepoints)*tour.point_per_match)
+            
+            db.session.add(match)
+            db.session.commit()
+
+            flash('Changes saved!')
+            return redirect(url_for('users.tournament', username=username, id=tour.id))
+
+        if form.errors:
+            flash('Please, correct errors found!', 'error')
+    return render_template('/users/edit_match.html', title=_('Edit match'), form=form, tour=tour, match=match)
 
 @blueprint.route('/<username>/tour-<int:id>/create-matches', methods=['POST', 'GET'])
 @login_required

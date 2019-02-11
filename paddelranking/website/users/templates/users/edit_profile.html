@@ -11,7 +11,17 @@
       {% if messages %}
           {% for category, message in messages %}
             {% if category == 'error' %}
-            <div class="alert alert-danger" role="alert">{{ message }}</div>
+            <div class="alert alert-danger" role="alert">{{ message }}
+              {% if form.errors %}
+                <ul class="errors">
+                    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                        {% for error in field_errors %}
+                            <li>{{ form[field_name].label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            </div>
               {% else %}
               <div class="alert alert-info" role="alert">{{ message }}</div>
               {% endif %}

@@ -2,7 +2,7 @@ from flask_login import current_user
 from flask_wtf import FlaskForm
 
 from wtforms import StringField, SubmitField, FieldList, FormField
-from wtforms.fields.html5 import IntegerField
+from wtforms.fields.html5 import IntegerField, DateField
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from wtforms.validators import ValidationError, DataRequired, Email, Length
 from flask_wtf.file import FileField, FileAllowed, FileRequired
@@ -77,8 +77,32 @@ class BaseTournamentForm(ModelForm):
 class MatchPointsForm(ModelForm):
     """ Create a list of players """
 
+    set1 = IntegerField('Set 1')
+    set2 = IntegerField('Set 2')
+    set3 = IntegerField('Set 3')
+
+
     class Meta:
         # No need for csrf token in this child form
-        # csrf = False
+        csrf = False
         model = MatchResultsByTeam
 
+        all_fields_optional = True
+        assign_required = False
+        exclude = ['winner', 'score', '_matchpoints', 'gamepoints']
+        include_foreign_keys = False
+
+
+
+class MatchForm(ModelForm):
+
+    class Meta:
+        model = Match
+        all_fields_optional = True
+        assign_required = False
+
+    matchdate = DateField('Match Date')
+    results = ModelFieldList(FormField(MatchPointsForm), label="Match Score", min_entries=2, max_entries=2)
+
+    submit = SubmitField('Save')
+    cancel = SubmitField('Cancel')
