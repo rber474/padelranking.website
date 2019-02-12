@@ -66,6 +66,37 @@ class Player(db.Model):
     teams = db.relationship('Team', primaryjoin="or_(Player.id==Team.player1, Player.id==Team.player2)", lazy='dynamic')
 
 
+    points = db.relationship("MatchResultsByTeam",
+                   secondary=
+                   "join(Team, MatchResultsByTeam, or_(Team.id==MatchResultsByTeam.team,Team.id==MatchResultsByTeam.team))."
+                   "join(Match, or_(Match.team1==MatchResultsByTeam.team,Match.team2==MatchResultsByTeam.team))",
+
+                   primaryjoin="or_(Team.player1==Player.id, Team.player2==Player.id)",
+                   secondaryjoin="or_(MatchResultsByTeam.team==Team.id, MatchResultsByTeam.team==Team.id)",
+                   uselist=True,
+                   viewonly=True)
+
+    @hybrid_property
+    def total_score(self):
+        return sum(matchresult.matchpoints for matchresult in self.points)
+
+    @hybrid_property
+    def points_score(self):
+        return sum(matchresult.gamepoints for matchresult in self.points)
+
+    @hybrid_property
+    def matches_played(self):
+        return len(self.points)
+
+    @hybrid_property
+    def matches_won(self):
+        return len([matchresult for matchresult in self.points if matchresult.winner==1])
+
+    @hybrid_property
+    def matches_lost(self):
+        return len([matchresult for matchresult in self.points if matchresult.winner==0])
+
+
 
     def __repr__(self):
         return '<Player {} from user {}>'.format(self.playername, self.userid) 
@@ -133,6 +164,15 @@ class Match(db.Model):
     played = db.Column(db.Boolean, default=False)
     results = db.relationship('MatchResultsByTeam', backref='match',
         lazy='dynamic')
+
+    points = db.relationship('MatchResultsByTeam', 
+        primaryjoin="Match.id==MatchResultsByTeam.match_id",
+        secondary="match_results_by_team",
+        secondaryjoin="or_(match_results_by_team.c.team==Match.team1, match_results_by_team.c.team==Match.team2)", 
+        backref="matches", 
+        lazy='dynamic')
+
+
 
     def __repr__(self):
         return '<Match {}, Date {}, Team1 {}, Team2 {}, Tour {}>'.format(

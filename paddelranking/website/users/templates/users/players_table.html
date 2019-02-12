@@ -14,9 +14,9 @@
 		{% for player in tour.players %}
 		<tr>
 			<td>{{player.playername}}</td>
-			<td class="text-center">3</td>
-			<td class="text-center">2</td>
-			<td class="text-center">1</td>
+			<td class="text-center">{{player.matches_played}}</td>
+			<td class="text-center">{{player.matches_won}}</td>
+			<td class="text-center">{{player.matches_lost}}</td>
 			<td class="text-center">5</td>
 			<td class="text-center">4</td>
 		</tr>

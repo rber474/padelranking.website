@@ -7,7 +7,7 @@
     <div class="col-md-6 col-sm-12 col-xs-12">
         <div class="x_panel tile">
             <div class="x_title">
-                <h4 class="pull-left">Match {{ loop.index }} <small>{{match.matchdate | datetime('short') }} </small></h4>
+                <h4 class="pull-left">{{_('Match')}} {{ loop.index }} <small>{{match.matchdate | datetime('short') }} </small></h4>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     <li class="dropdown">
@@ -43,7 +43,7 @@
 										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set2 > mpoints2.set2 %} text-success {% else %}text-danger{% endif%}" {% if players1|length >1 %} rowspan="2"{% endif %}>{{mpoints.set2}}</td>
 										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set3 > mpoints2.set3 %} text-success {% else %}text-danger{% endif%}" {% if players1|length >1 %} rowspan="2"{% endif %}>{{mpoints.set3}}</td>
 										{% endif %}
-										<td class="col-md-1 visible-md visible-lg text-center">5</td>
+										<td class="col-md-1 visible-md visible-lg text-center">{{player.total_score}}</td>
 										<td class="col-md-2 text-center">{{mpoints.gamepoints}}</td>
 										<td class="col-md-2 text-center">{{mpoints.matchpoints}}</td>
 									</tr>
@@ -58,7 +58,7 @@
 										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set2 < mpoints2.set2 %} text-success {% else %}text-danger{% endif%}" {% if players2|length>1 %} rowspan="2"{% endif %}>{{mpoints2.set2}}</td>
 										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set3 < mpoints2.set3 %} text-success {% else %}text-danger{% endif%}" {% if players2|length>1 %} rowspan="2"{% endif %}>{{mpoints2.set3}}</td>
 										{% endif %}
-										<td class="col-md-1 visible-md visible-lg text-center">5</td>
+										<td class="col-md-1 visible-md visible-lg text-center">{{player.total_score}}</td>
 										<td class="col-md-2 text-center">{{mpoints2.gamepoints}}</td>
 										<td class="col-md-2 text-center">{{mpoints2.matchpoints}}</td>
 									</tr>

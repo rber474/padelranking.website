@@ -225,11 +225,11 @@ def edit_match(username, tourid, matchid):
             match.matchdate = form.matchdate.data
             match.played = True
             match.results.extend(scores)
-            import pdb; pdb.set_trace()
+
             games = match.results.all()
             score1 = games[0]
             score2 = games[1]
-            
+
             score1.matchpoints = round(score1.gamepoints / (score1.gamepoints+score2.gamepoints)*tour.point_per_match)
             score2.matchpoints = round(score2.gamepoints / (score1.gamepoints+score2.gamepoints)*tour.point_per_match)
             
