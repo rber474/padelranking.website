@@ -1,3 +1,4 @@
+from flask_babel import _, lazy_gettext as _l
 from flask_login import current_user
 from flask_wtf import FlaskForm
 
@@ -25,29 +26,29 @@ class ModelForm(BaseModelForm):
 class EditProfileForm(FlaskForm):
     """ Edit user personal data """
 
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    name = StringField('Name', validators=[DataRequired()])
-    surname1 = StringField('Surname 1', validators=[DataRequired()])
-    surname2 = StringField('Surname 2', validators=[])
-    portrait = FileField('Portrait',
-        description="Upload an image file up to 16 MB, better if 300x300 (squared)",
+    email = StringField(_l('Email'), validators=[DataRequired(), Email()])
+    name = StringField(_l('Name'), validators=[DataRequired()])
+    surname1 = StringField(_l('Surname 1'), validators=[DataRequired()])
+    surname2 = StringField(_l('Surname 2'), validators=[])
+    portrait = FileField(_l('Portrait'),
+        description=_l("Upload an image file up to 16 MB, better if 300x300 (squared)"),
         validators=[
-            FileAllowed(portraits, 'Images only!')])
+            FileAllowed(portraits, _l('Images only!'))])
 
-    submit = SubmitField('Save')
-    cancel = SubmitField('Cancel')
+    submit = SubmitField(_l('Save'))
+    cancel = SubmitField(_l('Cancel'))
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None and user.id != current_user.id:
-            raise ValidationError('Please use a different email address.')
+            raise ValidationError(_l('Please use a different email address.'))
 
 
 class PlayersForm(ModelForm):
     """ Create a list of players """
 
-    playername = StringField('Player Nick',
-            description="Please, provide a nick lower than 64 characters.",
+    playername = StringField(_l('Player Nick'),
+            description=_l("Please, provide a nick lower than 64 characters."),
             validators=[Length(max=64)])
 
     class Meta:
@@ -62,24 +63,24 @@ class BaseTournamentForm(ModelForm):
     class Meta:
         model = Tournament
 
-    submit = SubmitField('Save')
-    cancel = SubmitField('Cancel')
+    submit = SubmitField(_l('Save'))
+    cancel = SubmitField(_l('Cancel'))
 
-    name = StringField('Tournament Title',validators=[DataRequired()])
-    point_per_match = IntegerField('Points per match', validators=[DataRequired()], default=100)
-    match_per_round = IntegerField('Matches per round', validators=[DataRequired()], default=3)
-    rounds_qty = IntegerField('Rounds', validators=[DataRequired()], default=3)
-    players = QuerySelectMultipleField('Select the players...',query_factory=possible_players, get_label='playername')
-    players_input = ModelFieldList(FormField(PlayersForm), label="Player", min_entries=1)
-    add_player = SubmitField('Add Player')
+    name = StringField(_l('Tournament Title'),validators=[DataRequired()])
+    point_per_match = IntegerField(_l('Points per match'), validators=[DataRequired()], default=100)
+    match_per_round = IntegerField(_l('Matches per round'), validators=[DataRequired()], default=3)
+    rounds_qty = IntegerField(_l('Rounds'), validators=[DataRequired()], default=3)
+    players = QuerySelectMultipleField(_l('Select the players...'),query_factory=possible_players, get_label='playername')
+    players_input = ModelFieldList(FormField(PlayersForm), label=_l("Player"), min_entries=1)
+    add_player = SubmitField(_l('Add Player'))
 
 
 class MatchPointsForm(ModelForm):
     """ Create a list of players """
 
-    set1 = IntegerField('Set 1')
-    set2 = IntegerField('Set 2')
-    set3 = IntegerField('Set 3')
+    set1 = IntegerField(_l('Set 1'))
+    set2 = IntegerField(_l('Set 2'))
+    set3 = IntegerField(_l('Set 3'))
 
 
     class Meta:
@@ -101,8 +102,8 @@ class MatchForm(ModelForm):
         all_fields_optional = True
         assign_required = False
 
-    matchdate = DateField('Match Date')
-    results = ModelFieldList(FormField(MatchPointsForm), label="Match Score", min_entries=2, max_entries=2)
+    matchdate = DateField(_l('Match Date'))
+    results = ModelFieldList(FormField(MatchPointsForm), label=_l("Match Score"), min_entries=2, max_entries=2)
 
-    submit = SubmitField('Save')
-    cancel = SubmitField('Cancel')
+    submit = SubmitField(_l('Save'))
+    cancel = SubmitField(_l('Cancel'))

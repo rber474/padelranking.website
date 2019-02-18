@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  PADDELRANKING.WEBSITE\n"
 "Report-Msgid-Bugs-To: rber474@gmail.com\n"
-"POT-Creation-Date: 2019-01-29 00:58+0100\n"
+"POT-Creation-Date: 2019-02-18 01:09+0100\n"
 "PO-Revision-Date: 2019-01-29 00:22+0100\n"
 "Last-Translator: RAFAEL BERMUDEZ HORCAJADA <rber474@gmail.com>\n"
 "Language: es\n"
@@ -18,30 +18,311 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.6.0\n"
 
-#: paddelranking/website/users/routes.py:56
+#: paddelranking/website/templates/base.html:3
+msgid "Welcome to PaddelRanking"
+msgstr "Bienvenido a PaddelRanking"
+
+#: paddelranking/website/templates/base.html:28
+msgid "Toggle navigation"
+msgstr "Alternar navegación"
+
+#: paddelranking/website/templates/base.html:37
+#: paddelranking/website/users/templates/users/sidebar.html:31
+msgid "Home"
+msgstr "Inicio"
+
+#: paddelranking/website/templates/base.html:50
+msgid "My control panel"
+msgstr "Mi panel de control"
+
+#: paddelranking/website/templates/base.html:53
+msgid "Logout"
+msgstr "Salir"
+
+#: paddelranking/website/templates/base.html:60
+msgid "Login"
+msgstr "Entrar"
+
+#: paddelranking/website/templates/base.html:63
+msgid "Register"
+msgstr "Registrarse"
+
+#: paddelranking/website/templates/base_dashboard.html:16
+msgid "Welcome to"
+msgstr "Bienvenido a"
+
+#: paddelranking/website/templates/footer.html:2
+msgid "Created by "
+msgstr "Creado por"
+
+#: paddelranking/website/templates/footer.html:7
+msgid "Based on "
+msgstr "Basado en"
+
+#: paddelranking/website/templates/top_navigation.html:14
+msgid "Profile"
+msgstr "Perfil"
+
+#: paddelranking/website/templates/top_navigation.html:15
+msgid " Log Out"
+msgstr " Salir"
+
+#: paddelranking/website/users/forms.py:29
+msgid "Email"
+msgstr "Email"
+
+#: paddelranking/website/users/forms.py:30
+msgid "Name"
+msgstr "Nombre"
+
+#: paddelranking/website/users/forms.py:31
+msgid "Surname 1"
+msgstr "Apelllido 1"
+
+#: paddelranking/website/users/forms.py:32
+msgid "Surname 2"
+msgstr "Apellido 2"
+
+#: paddelranking/website/users/forms.py:33
+msgid "Portrait"
+msgstr "Imagen de perfil"
+
+#: paddelranking/website/users/forms.py:34
+msgid "Upload an image file up to 16 MB, better if 300x300 (squared)"
+msgstr "Sube una imagen de hasta 16MB, mejor si tiene 300x300 pixels (cuadrada)"
+
+#: paddelranking/website/users/forms.py:36
+msgid "Images only!"
+msgstr "¡Sólo imágenes!"
+
+#: paddelranking/website/users/forms.py:38
+#: paddelranking/website/users/forms.py:66
+#: paddelranking/website/users/forms.py:108
+msgid "Save"
+msgstr "Guardar"
+
+#: paddelranking/website/users/forms.py:39
+#: paddelranking/website/users/forms.py:67
+#: paddelranking/website/users/forms.py:109
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: paddelranking/website/users/forms.py:44
+msgid "Please use a different email address."
+msgstr "Por favor, usa una dirección de correo diferente."
+
+#: paddelranking/website/users/forms.py:50
+msgid "Player Nick"
+msgstr "Pseudónimo del jugador"
+
+#: paddelranking/website/users/forms.py:51
+msgid "Please, provide a nick lower than 64 characters."
+msgstr "Por favor, introduce un pseudónimo de menos de 64 caracteres."
+
+#: paddelranking/website/users/forms.py:69
+msgid "Tournament Title"
+msgstr "Nombre del torneo"
+
+#: paddelranking/website/users/forms.py:70
+#: paddelranking/website/users/templates/users/tournament.html:36
+msgid "Points per match"
+msgstr "Puntos por partido"
+
+#: paddelranking/website/users/forms.py:71
+#: paddelranking/website/users/templates/users/tournament.html:32
+msgid "Matches per round"
+msgstr "Partidos por vuelta"
+
+#: paddelranking/website/users/forms.py:72
+#: paddelranking/website/users/templates/users/tournament.html:28
+msgid "Rounds"
+msgstr "Vueltas"
+
+#: paddelranking/website/users/forms.py:73
+msgid "Select the players..."
+msgstr "Elije los jugadores..."
+
+#: paddelranking/website/users/forms.py:74
+#: paddelranking/website/users/templates/users/players_table.html:5
+msgid "Player"
+msgstr "Jugador"
+
+#: paddelranking/website/users/forms.py:75
+msgid "Add Player"
+msgstr "Añadir jugador"
+
+#: paddelranking/website/users/forms.py:81
+msgid "Set 1"
+msgstr "Set 1"
+
+#: paddelranking/website/users/forms.py:82
+msgid "Set 2"
+msgstr "Set 2"
+
+#: paddelranking/website/users/forms.py:83
+msgid "Set 3"
+msgstr "Set 3"
+
+#: paddelranking/website/users/forms.py:105
+msgid "Match Date"
+msgstr "Fecha del partido"
+
+#: paddelranking/website/users/forms.py:106
+msgid "Match Score"
+msgstr "Puntos partido"
+
+#: paddelranking/website/users/routes.py:55
+#: paddelranking/website/users/routes.py:138
+#: paddelranking/website/users/routes.py:188
+#: paddelranking/website/users/routes.py:247
 msgid "Changes canceled!"
 msgstr "¡Cambios cancelados!"
 
-#: paddelranking/website/users/routes.py:78
+#: paddelranking/website/users/routes.py:77
+#: paddelranking/website/users/routes.py:156
+#: paddelranking/website/users/routes.py:206
+#: paddelranking/website/users/routes.py:287
 msgid "Changes saved!"
 msgstr "¡Cambios guardados!"
 
-#: paddelranking/website/users/routes.py:81
+#: paddelranking/website/users/routes.py:80
+#: paddelranking/website/users/routes.py:210
+#: paddelranking/website/users/routes.py:291
 msgid "Please, correct errors found!"
 msgstr "¡Por favor, corrige los errores encontrados!"
 
-#: paddelranking/website/users/routes.py:83
+#: paddelranking/website/users/routes.py:82
 #: paddelranking/website/users/templates/users/sidebar.html:34
 msgid "Edit my profile"
 msgstr "Modificar mi perfil"
 
+#: paddelranking/website/users/routes.py:162
 #: paddelranking/website/users/templates/users/my_tournaments.html:23
 msgid "Create new tournament"
 msgstr "Crear torneo nuevo"
 
-#: paddelranking/website/users/templates/users/sidebar.html:31
-msgid "Home"
-msgstr "Inicio"
+#: paddelranking/website/users/routes.py:181
+msgid ""
+"You have already created matches for this tournament. Only few fields can"
+" be modified."
+msgstr ""
+"Ya has creado partidos para este torneo. Sólo podrás modificar algunos "
+"campos."
+
+#: paddelranking/website/users/routes.py:184
+#: paddelranking/website/users/routes.py:212
+msgid "Edit tournament"
+msgstr "Editar el torneo"
+
+#: paddelranking/website/users/routes.py:292
+msgid "Edit match"
+msgstr "Editar el partido"
+
+#: paddelranking/website/users/routes.py:342
+msgid "All matches created."
+msgstr "Todos los partidos creados."
+
+#: paddelranking/website/users/templates/users/create_tournament.html:24
+#: paddelranking/website/users/templates/users/edit_profile.html:43
+#: paddelranking/website/users/templates/users/edit_tournament.html:24
+msgid "All fields marked with * are required"
+msgstr "Todos los campos marcados con * son obligatorios"
+
+#: paddelranking/website/users/templates/users/create_tournament.html:55
+#: paddelranking/website/users/templates/users/edit_tournament.html:54
+msgid "Tournament Name"
+msgstr "Nombre del torneo"
+
+#: paddelranking/website/users/templates/users/create_tournament.html:67
+#: paddelranking/website/users/templates/users/edit_tournament.html:67
+#: paddelranking/website/users/templates/users/tournament.html:53
+msgid "Players"
+msgstr "Jugadores"
+
+#: paddelranking/website/users/templates/users/edit_match.html:46
+#, python-format
+msgid "Team %(teamid)s:"
+msgstr "Equipo %(teamid)s:"
+
+#: paddelranking/website/users/templates/users/edit_profile.html:38
+msgid "Remove"
+msgstr "Eliminar"
+
+#: paddelranking/website/users/templates/users/matches_table.html:10
+msgid "Match"
+msgstr "Partido"
+
+#: paddelranking/website/users/templates/users/matches_table.html:14
+msgid "Edit the match "
+msgstr "Editar el partido"
+
+#: paddelranking/website/users/templates/users/matches_table.html:27
+msgid "Teams / Players"
+msgstr "Equipos / Jugadores"
+
+#: paddelranking/website/users/templates/users/matches_table.html:28
+msgid "SET 1"
+msgstr "SET 1"
+
+#: paddelranking/website/users/templates/users/matches_table.html:29
+msgid "SET 2"
+msgstr "SET 2"
+
+#: paddelranking/website/users/templates/users/matches_table.html:30
+msgid "SET 3"
+msgstr "SET 3"
+
+#: paddelranking/website/users/templates/users/matches_table.html:31
+msgid "Score"
+msgstr "Puntuación"
+
+#: paddelranking/website/users/templates/users/matches_table.html:32
+msgid "Game points"
+msgstr "Puntos por juegos"
+
+#: paddelranking/website/users/templates/users/matches_table.html:33
+msgid "Match points"
+msgstr "Puntos por partido"
+
+#: paddelranking/website/users/templates/users/my_tournaments.html:34
+msgid "Playing now..."
+msgstr "En juego..."
+
+#: paddelranking/website/users/templates/users/my_tournaments.html:36
+msgid "Finished"
+msgstr "Finalizado"
+
+#: paddelranking/website/users/templates/users/players.html:4
+msgid "Or add new players here..."
+msgstr "O añade nuevos jugadores aquí..."
+
+#: paddelranking/website/users/templates/users/players.html:11
+msgid "Player Name"
+msgstr "Nombre del jugador"
+
+#: paddelranking/website/users/templates/users/players_table.html:6
+msgid "Total matches"
+msgstr "Partidos totales"
+
+#: paddelranking/website/users/templates/users/players_table.html:7
+msgid "Matches won"
+msgstr "Partidos ganados"
+
+#: paddelranking/website/users/templates/users/players_table.html:8
+msgid "Matches lost"
+msgstr "Partidos perdidos"
+
+#: paddelranking/website/users/templates/users/players_table.html:9
+msgid "Sets won"
+msgstr "Sets ganados"
+
+#: paddelranking/website/users/templates/users/players_table.html:10
+msgid "Sets lost"
+msgstr "Sets perdidos"
+
+#: paddelranking/website/users/templates/users/sidebar.html:18
+msgid "Welcome,"
+msgstr "Bienvenido,"
 
 #: paddelranking/website/users/templates/users/sidebar.html:33
 msgid "Back to home"
@@ -58,4 +339,43 @@ msgstr "Nuevo torneo"
 #: paddelranking/website/users/templates/users/sidebar.html:40
 msgid "My tournaments"
 msgstr "Mis torneos"
+
+#: paddelranking/website/users/templates/users/sidebar.html:52
+msgid " Friends "
+msgstr " Amigos "
+
+#: paddelranking/website/users/templates/users/sidebar.html:52
+msgid "Coming Soon"
+msgstr "Próximamente"
+
+#: paddelranking/website/users/templates/users/tournament.html:24
+msgid "Total Players"
+msgstr "Total Jugadores"
+
+#: paddelranking/website/users/templates/users/tournament.html:43
+msgid "Edit this tournament"
+msgstr "Editar este torneo"
+
+#: paddelranking/website/users/templates/users/tournament.html:59
+msgid "Matches"
+msgstr "Partidos"
+
+#: paddelranking/website/users/templates/users/tournament.html:63
+msgid "You haven't created the matches yet."
+msgstr "Aún no has creado los partidos."
+
+#: paddelranking/website/users/templates/users/tournament.html:67
+msgid "Generate all matches"
+msgstr "Crear todos los partidos"
+
+#: paddelranking/website/users/templates/users/tournament.html:67
+msgid "Create them!"
+msgstr "¡Crear ahora!"
+
+#: paddelranking/website/users/templates/users/tournament.html:73
+#: paddelranking/website/users/templates/users/tournament.html:79
+msgid "Round"
+msgstr "Vuelta"
+
+
 

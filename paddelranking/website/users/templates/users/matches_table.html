@@ -13,7 +13,7 @@
                     <li class="dropdown">
                         <a href="{{url_for('users.edit_match', username=current_user.username, tourid=tour.id, matchid=match.id)}}" title="{{_('Edit the match ')}}" 
                          role="button">
-                            <i class="fa fa-wrench"></i>
+                            <i class="fa fa-edit"></i>
                         </a>
                     </li>
                     <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -24,13 +24,13 @@
 							<table class="table table-hover table-striped">
 								<thead>
 									<tr>
-										<th class="text-center">Teams / Players</th>
-										<th class="text-center">SET 1</th>
-										<th class="text-center">SET 2</th>
-										<th class="text-center">SET 3</th>
-										<th class="text-center visible-md visible-lg">Score</th>
-										<th class="text-center">Game points</th>
-										<th class="text-center">Match points</th>
+										<th class="text-center">{{_('Teams / Players')}}</th>
+										<th class="text-center">{{_('SET 1')}}</th>
+										<th class="text-center">{{_('SET 2')}}</th>
+										<th class="text-center">{{_('SET 3')}}</th>
+										<th class="text-center visible-md visible-lg">{{_('Score')}}</th>
+										<th class="text-center">{{_('Game points')}}</th>
+										<th class="text-center">{{_('Match points')}}</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -43,7 +43,7 @@
 										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set2 > mpoints2.set2 %} text-success {% else %}text-danger{% endif%}" {% if players1|length >1 %} rowspan="2"{% endif %}>{{mpoints.set2}}</td>
 										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set3 > mpoints2.set3 %} text-success {% else %}text-danger{% endif%}" {% if players1|length >1 %} rowspan="2"{% endif %}>{{mpoints.set3}}</td>
 										{% endif %}
-										<td class="col-md-1 visible-md visible-lg text-center">{{player.total_score}}</td>
+										<td class="col-md-1 visible-md visible-lg text-center">{{player.total_score(tour.id)}}</td>
 										<td class="col-md-2 text-center">{{mpoints.gamepoints}}</td>
 										<td class="col-md-2 text-center">{{mpoints.matchpoints}}</td>
 									</tr>
@@ -58,7 +58,7 @@
 										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set2 < mpoints2.set2 %} text-success {% else %}text-danger{% endif%}" {% if players2|length>1 %} rowspan="2"{% endif %}>{{mpoints2.set2}}</td>
 										<td class="col-md-1 text-center bg-danger centered {% if mpoints and mpoints.set3 < mpoints2.set3 %} text-success {% else %}text-danger{% endif%}" {% if players2|length>1 %} rowspan="2"{% endif %}>{{mpoints2.set3}}</td>
 										{% endif %}
-										<td class="col-md-1 visible-md visible-lg text-center">{{player.total_score}}</td>
+										<td class="col-md-1 visible-md visible-lg text-center">{{player.total_score(tour.id)}}</td>
 										<td class="col-md-2 text-center">{{mpoints2.gamepoints}}</td>
 										<td class="col-md-2 text-center">{{mpoints2.matchpoints}}</td>
 									</tr>

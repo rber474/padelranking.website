@@ -37,7 +37,14 @@
         <div class="count {% if not is_closed %}text-success{% else %} text-danger{% endif %}">{{tour.point_per_match}}</div>
       </div>
     </div>
-    <h1 class="col-md-offset-3">{{ tour.name }} <small>{{ tour.created | datetime('short') }}</small></h1>
+    <h1 class="col-md-offset-3">{{ tour.name }}
+      <small>{{ tour.created | datetime('short') }}</small>
+      <span class="pull-right">
+        <a href="{{url_for('users.edit_tournament', username=current_user.username, tourid=tour.id)}}" title="{{_('Edit this tournament')}}">
+          <i class="fa fa-edit"></i>
+        </a>
+      </span>
+    </h1>
     <div class="row">
 	    
 			<div class="panel {% if not is_closed %}panel-success{% else %} panel-danger{% endif %}">
@@ -63,13 +70,13 @@
           {% if tour.matches %}
             <ul class="nav nav-tabs">
             {% for round in tour.rounds %}
-              <li role="presentation" {% if loop.first %} class="active" {% endif %}><a href="#content-round-{{round.id}}" aria-controls="content-round-{{round.id}}" role="tab" data-toggle="tab">{{_('Round {}'.format(loop.index)) }}</a></li>
+              <li role="presentation" {% if loop.first %} class="active" {% endif %}><a href="#content-round-{{round.id}}" aria-controls="content-round-{{round.id}}" role="tab" data-toggle="tab">{{_('Round')}} {{ loop.index }}</a></li>
             {% endfor%}
             </ul>
             <div class="tab-content">
             {% for round in tour.rounds %}
               <div role="tabpanel" {% if loop.first %} class="tab-pane fade in active" {% else %} class="tab-pane fade" {% endif %}  id="content-round-{{round.id}}">
-                <h3>{{_('Round {}'.format(loop.index)) }}</h3>
+                <h3>{{_('Round')}} {{loop.index}}</h3>
                 {% include "users/matches_table.html" %}  
               </div>
             {% endfor%}

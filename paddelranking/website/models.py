@@ -2,7 +2,7 @@ from datetime import datetime
 from hashlib import md5
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -76,27 +76,51 @@ class Player(db.Model):
                    uselist=True,
                    viewonly=True)
 
-    @hybrid_property
-    def total_score(self):
-        return sum(matchresult.matchpoints for matchresult in self.points)
+    @hybrid_method
+    def total_score(self, tourid=None):
+        if not tourid:
+            return sum(matchresult.matchpoints for matchresult in self.points)
+        return sum(matchresult.matchpoints for matchresult in self.points if matchresult.match.tour==tourid)
+    @hybrid_method
+    def points_score(self, tourid=None):
+        if not tourid:
+            return sum(matchresult.gamepoints for matchresult in self.points)
+        return sum(matchresult.gamepoints for matchresult in self.points if matchresult.match.tour==tourid)
 
-    @hybrid_property
-    def points_score(self):
-        return sum(matchresult.gamepoints for matchresult in self.points)
+    @hybrid_method
+    def matches_played(self, tourid=None):
+        if not tourid:
+            return len(self.points)
+        return len([match for match in self.points if match.match.tour==tourid])
 
-    @hybrid_property
-    def matches_played(self):
-        return len(self.points)
+    @hybrid_method
+    def matches_won(self, tourid=None):
+        if not tourid:
+            return len([matchresult for matchresult in self.points if matchresult.winner==1])
+        return len([matchresult for matchresult in self.points if matchresult.winner==1 and matchresult.match.tour==tourid])
 
-    @hybrid_property
-    def matches_won(self):
-        return len([matchresult for matchresult in self.points if matchresult.winner==1])
+    @hybrid_method
+    def matches_lost(self, tourid=None):
+        if not tourid:
+            return len([matchresult for matchresult in self.points if matchresult.winner==1])
+        return len([matchresult for matchresult in self.points if matchresult.winner==0 and matchresult.match.tour==tourid])
 
-    @hybrid_property
-    def matches_lost(self):
-        return len([matchresult for matchresult in self.points if matchresult.winner==0])
+    @hybrid_method
+    def sets_played(self, tourid=None):
+       
+        if tourid:
+            scores = [matchresult.get_score() for matchresult in self.points if matchresult.match.tour==tourid]
+        else:
+            scores = [matchresult.get_score() for matchresult in self.points]
 
-
+        played={'won':0, 'lost':0}
+        for item in scores:
+            for key, score in item.items():
+                if score >= 6:
+                    played['won'] = played['won']+1
+                else:
+                    played['lost'] = played['lost']+1
+        return played
 
     def __repr__(self):
         return '<Player {} from user {}>'.format(self.playername, self.userid) 
@@ -137,6 +161,29 @@ class Tournament(db.Model):
                     lazy='dynamic',
                     backref=db.backref('tournaments', lazy='dynamic'))
 
+    matchresults = db.relationship("MatchResultsByTeam",
+                   secondary=
+                   "join(Team, MatchResultsByTeam, Team.id==MatchResultsByTeam.team)."
+                   "join(Match, or_(Match.team1==MatchResultsByTeam.team,Match.team2==MatchResultsByTeam.team))."
+                   "join(Player, or_(Team.player1==Player.id, Team.player2==Player.id))",
+
+                   primaryjoin="Match.tour==Tournament.id",
+
+                   secondaryjoin="and_(or_(MatchResultsByTeam.team==Team.id, MatchResultsByTeam.team==Team.id),or_(Team.player1==Player.id, Team.player2==Player.id))",
+                   uselist=True,
+                   viewonly=True)
+
+    @hybrid_property
+    def scores_by_player(self):
+        results = {}
+        for score in self.matchresults:
+            for player in score.players:
+                if player.id in results:
+                    results[player.id] = results[player.id]+score.matchresults
+                else:
+                    results[player.id]
+        return results
+
     def __repr__(self):
         return '<Tournament {}>'.format(self.id)
 
@@ -165,15 +212,6 @@ class Match(db.Model):
     results = db.relationship('MatchResultsByTeam', backref='match',
         lazy='dynamic')
 
-    points = db.relationship('MatchResultsByTeam', 
-        primaryjoin="Match.id==MatchResultsByTeam.match_id",
-        secondary="match_results_by_team",
-        secondaryjoin="or_(match_results_by_team.c.team==Match.team1, match_results_by_team.c.team==Match.team2)", 
-        backref="matches", 
-        lazy='dynamic')
-
-
-
     def __repr__(self):
         return '<Match {}, Date {}, Team1 {}, Team2 {}, Tour {}>'.format(
                                                         self.id,
@@ -194,8 +232,18 @@ class MatchResultsByTeam(db.Model):
 
     winner = db.Column(db.Boolean, default=False)
 
+    players = db.relationship("Player",
+                   secondary=
+                   "join(Team, Player, or_(Team.player1==Player.id, Team.player2==Player.id))."
+                   "join(Match, or_(Match.team1==Team.id,Match.team2==Team.id))",
+                   secondaryjoin="or_(Team.player1==Player.id, Team.player2==Player.id)",
+                   primaryjoin="Team.id==MatchResultsByTeam.team",
+                   uselist=True,
+                   viewonly=True,
+                   backref="scores")
+
     def __repr__(self):
-        return '<MatchResults for team {}>'.format(self.team)
+        return '<MatchResults match:{} for team {}>'.format(self.match_id, self.team)
 
     def get_score(self):
         return dict(set1=self.set1, set2=self.set2, set3=self.set3)
@@ -211,3 +259,5 @@ class MatchResultsByTeam(db.Model):
             self.winner = True
         else:
             self.winner = False
+
+

@@ -1,12 +1,10 @@
 import os
 from datetime import datetime
-import functools
+
 from flask import (
     flash, g, redirect, render_template, request, url_for, current_app
 )
 from flask_babel import _
-from werkzeug.exceptions import abort
-from werkzeug import secure_filename
 from flask_login import login_required, current_user
 
 from paddelranking.website import portraits
@@ -137,7 +135,7 @@ def create_tournament(username):
 
     if form.is_submitted():
         if form.cancel.data:
-            flash('Changes canceled!')
+            flash(_('Changes canceled!'))
             return redirect(url_for('users.my_tournaments', username=username))
 
         if form.validate_on_submit():
@@ -155,20 +153,70 @@ def create_tournament(username):
             tour.createdby = current_user.id
             db.session.add(tour)
             db.session.commit()
-            flash('Changes saved!')
+            flash(_('Changes saved!'))
             return redirect(url_for('users.my_tournaments', username=username))
 
         if form.errors:
             flash('Please, correct errors found!')
 
-    return render_template('/users/create_tournament.html', title='Create new tournament', form=form)
+    return render_template('/users/create_tournament.html', title=_('Create new tournament'), form=form)
+
+@blueprint.route('/<username>/edit-tour-<int:tourid>.hmtl', methods=['POST', 'GET'])
+@login_required
+@is_current_user
+def edit_tournament(username, tourid):
+
+    user = User.query.filter_by(username=username).first_or_404()
+    tour = Tournament.query.filter_by(id=tourid).first_or_404()
+    form = BaseTournamentForm(request.form, obj=tour)
+
+    form.players.min_entries=4
+
+    if tour.matches:
+        form.point_per_match.render_kw={'readonly': True}
+        form.match_per_round.render_kw={'readonly': True}
+        form.rounds_qty.render_kw={'readonly': True}
+        form.players.render_kw={'readonly': True}
+        form.players.data = tour.players.all()
+        flash(_('You have already created matches for this tournament. Only few fields can be modified.'), 'error')
+    if form.add_player.data:
+        getattr(form,'players_input').append_entry()
+        return render_template('/users/edit_tournament.html', title=_('Edit tournament'), form=form)
+
+    if form.is_submitted():
+        if form.cancel.data:
+            flash(_('Changes canceled!'))
+            return redirect(url_for('users.tournament', username=username, id=tourid))
+
+        if form.validate_on_submit():
+            newplayers = []
+            for newplayer in form.players_input.data:
+                if newplayer.get('playername'):
+                    player = Player(**newplayer)
+
+                    player.createdby = current_user.id
+                    newplayers.append(player)
+            import pdb; pdb.set_trace()
+            delattr(form, 'players_input')
+            form.populate_obj(tour)
+            tour.players.extend(newplayers)
+            tour.createdby = current_user.id
+            db.session.add(tour)
+            db.session.commit()
+            flash(_('Changes saved!'))
+            return redirect(url_for('users.tournament', username=username, id=tour.id))
+
+        if form.errors:
+            flash(_('Please, correct errors found!'),'error')
+
+    return render_template('/users/edit_tournament.html', title=_('Edit tournament'), form=form, tour=tour, user=user)
 
 @blueprint.route('/<username>/process_add_member', methods=['POST'])
 @login_required
 @is_current_user
 def add_player(username):
 
-    form = TournamentForm()
+    form = BaseTournamentForm()
     getattr(form,'players_input').append_entry()
 
     return render_template('/users/players.html', form=form)
@@ -196,7 +244,7 @@ def edit_match(username, tourid, matchid):
 
     if form.is_submitted():
         if form.cancel.data:
-            flash('Changes canceled!')
+            flash(_('Changes canceled!'))
             return redirect(url_for('users.tournament', username=username, id=tour.id))
 
         if form.validate_on_submit():
@@ -236,11 +284,11 @@ def edit_match(username, tourid, matchid):
             db.session.add(match)
             db.session.commit()
 
-            flash('Changes saved!')
+            flash(_('Changes saved!'))
             return redirect(url_for('users.tournament', username=username, id=tour.id))
 
         if form.errors:
-            flash('Please, correct errors found!', 'error')
+            flash(_('Please, correct errors found!'), 'error')
     return render_template('/users/edit_match.html', title=_('Edit match'), form=form, tour=tour, match=match)
 
 @blueprint.route('/<username>/tour-<int:id>/create-matches', methods=['POST', 'GET'])

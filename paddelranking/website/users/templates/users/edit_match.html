@@ -43,7 +43,7 @@
               <fieldset class="row form-group {% if form.results.errors %}has-error{% endif%}">
                 <legend class="col-md-12 ">
 
-                    {{ _('Team {}:').format(loop.index)  }}
+                    {{ _('Team %(teamid)s:', teamid=loop.index )}}
                     {% if loop.index == 1 %}
                       {% set players = team_players(match.team1) %}
                     {% else %}

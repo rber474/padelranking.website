@@ -20,7 +20,7 @@
     {% endblock messages %}
     <h1 class="col-md-offset-4 col-sm-offset-4 col-xs-offset-0">
     	{{_(title)}}
-    	<span class="pull-right"><a href="{{url_for('users.create_tournament', username=current_user.username)}}" title="{{_('Create new tournament')}}"><i class="fa fa-plus-circle"></i></span>
+    	<span class="pull-right"><a href="{{url_for('users.create_tournament', username=current_user.username)}}" title="{{_('Create new tournament')}}"><i class="fa fa-plus-circle"></i></a></span>
     </h1>
     {% for tour in tours %}
     {% set is_closed = tour.closed %}
@@ -31,9 +31,9 @@
 			  	<h2 class="panel-title">{{ tour.name }}</h2>
 			  	<span>{{ tour.created | datetime('full') }}</span>
 			  	{% if not is_closed %}
-			  	<span class="label label-success pull-right">Playing now...</span>
+			  	<span class="label label-success pull-right">{{_('Playing now...')}}</span>
 			  	{% else %}
-			  	<span class="label label-danger pull-right">Finished</span>
+			  	<span class="label label-danger pull-right">{{_('Finished')}}</span>
 			  	{% endif %}
 		    </a>
 		  </div>
