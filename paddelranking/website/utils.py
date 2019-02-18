@@ -1,6 +1,7 @@
 from collections import deque
 from itertools import islice
 from functools import wraps
+
 from flask import flash, g, request, redirect, url_for, current_app
 from flask_login import current_user
 
@@ -20,6 +21,7 @@ def is_current_user(f):
 @babel.localeselector
 def get_locale():
     return request.accept_languages.best_match(current_app.config['LANGUAGES'])
+
 
 def fixtures(teams):
 

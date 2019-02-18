@@ -178,7 +178,7 @@ def edit_tournament(username, tourid):
         form.rounds_qty.render_kw={'readonly': True}
         form.players.render_kw={'readonly': True}
         form.players.data = tour.players.all()
-        flash(_('You have already created matches for this tournament. Only few fields can be modified.'), 'error')
+
     if form.add_player.data:
         getattr(form,'players_input').append_entry()
         return render_template('/users/edit_tournament.html', title=_('Edit tournament'), form=form)
@@ -208,6 +208,8 @@ def edit_tournament(username, tourid):
 
         if form.errors:
             flash(_('Please, correct errors found!'),'error')
+    else:
+        flash(_('You have already created matches for this tournament. Only few fields can be modified.'), 'error')
 
     return render_template('/users/edit_tournament.html', title=_('Edit tournament'), form=form, tour=tour, user=user)
 

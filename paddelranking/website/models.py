@@ -173,15 +173,15 @@ class Tournament(db.Model):
                    uselist=True,
                    viewonly=True)
 
-    @hybrid_property
+    @hybrid_method
     def scores_by_player(self):
         results = {}
         for score in self.matchresults:
             for player in score.players:
                 if player.id in results:
-                    results[player.id] = results[player.id]+score.matchresults
+                    results[player.id] = results[player.id]+score.matchpoints
                 else:
-                    results[player.id]
+                    results[player.id] = score.matchpoints
         return results
 
     def __repr__(self):

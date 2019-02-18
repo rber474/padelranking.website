@@ -5067,3 +5067,12 @@ if (typeof NProgress != 'undefined') {
 	});	
 	
 
+$(document).ready(function() {
+    $('.datatable-responsive').DataTable({
+    		responsive: true,
+    		searching:  false,
+    		info:       false,
+    		paging:     false,
+    		ordering:   false
+    	});
+} );

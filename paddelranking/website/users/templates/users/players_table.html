@@ -1,13 +1,14 @@
 <!-- Table -->
-<table class="table table-hover table-striped">
+<table class="table table-hover table-striped datatable-responsive ">
 	<thead>
 		<tr>
-			<th class="text-center">{{_('Player')}}</th>
-			<th class="text-center">{{_('Total matches')}}</th>
-			<th class="text-center">{{_('Matches won')}}</th>
-			<th class="text-center">{{_('Matches lost')}}</th>
-			<th class="text-center">{{_('Sets won')}}</th>
-			<th class="text-center">{{_('Sets lost')}}</th>
+			<th data-priority="1" class="text-center all">{{_('Player')}}</th>
+			<th data-priority="1" class="text-center all">{{_('Score')}}</th>
+			<th class="text-center desktop tablet-l tablet-p">{{_('Total matches')}}</th>
+			<th class="text-center desktop tablet-l tablet-p">{{_('Matches won')}}</th>
+			<th class="text-center desktop tablet-l tablet-p">{{_('Matches lost')}}</th>
+			<th class="text-center desktop tablet-l tablet-p">{{_('Sets won')}}</th>
+			<th class="text-center desktop tablet-l tablet-p">{{_('Sets lost')}}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -15,6 +16,7 @@
 		{% set sets = player.sets_played(tour.id)%}
 		<tr>
 			<td>{{player.playername}}</td>
+			<td class="text-center">{{tour.scores_by_player().get(player.id, 0)}}</td>
 			<td class="text-center">{{player.matches_played(tour.id)}}</td>
 			<td class="text-center">{{player.matches_won(tour.id)}}</td>
 			<td class="text-center">{{player.matches_lost(tour.id)}}</td>

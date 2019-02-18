@@ -41,7 +41,7 @@
       <small>{{ tour.created | datetime('short') }}</small>
       <span class="pull-right">
         <a href="{{url_for('users.edit_tournament', username=current_user.username, tourid=tour.id)}}" title="{{_('Edit this tournament')}}">
-          <i class="fa fa-edit"></i>
+          <i class="fa fa-edit small"></i>
         </a>
       </span>
     </h1>
