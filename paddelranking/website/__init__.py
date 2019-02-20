@@ -1,6 +1,10 @@
 import os
 from flask import Flask
 import flask_resize
+
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+
 from flask_babel import Babel
 from flask_uploads import (UploadSet, configure_uploads, IMAGES)
 
@@ -9,7 +13,7 @@ from importlib import import_module
 from sqlalchemy.engine import Engine 
 from sqlalchemy import event
 
-from paddelranking.website.config import Config, FlaskUploadConfig, FlaskResizeConfig
+from paddelranking.website.config import Config, FlaskUploadConfig, FlaskResizeConfig, FlaskAdminConfig
 
 babel = Babel()
 
@@ -40,7 +44,7 @@ def create_app(test_config=None):
     )
 
     app.config.from_object(Config)
-    
+
     # Database models
     from .models import (db, migrate, User, Team, login_manager,
                          Player, Tournament, Round, Match, MatchResultsByTeam,
@@ -48,8 +52,21 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # Flask Admin
+    '''
+    app.config.from_object(FlaskAdminConfig)
+    admin = Admin(app, name="paddelranking.website", template_mode="bootstrap3")
+    admin.add_view(ModelView(User, db.session))
+    admin.add_view(ModelView(Player, db.session))
+    admin.add_view(ModelView(Team, db.session))
+    admin.add_view(ModelView(Tournament, db.session))
+    admin.add_view(ModelView(Round, db.session))
+    admin.add_view(ModelView(Match, db.session))
+    admin.add_view(ModelView(MatchResultsByTeam, db.session))
+    '''
+    
     # Flask Resize
-    app.config.from_object(FlaskResizeConfig)
+    #app.config.from_object(FlaskResizeConfig)
     resize = flask_resize.Resize(app)
 
     # Flask Babel, i18n

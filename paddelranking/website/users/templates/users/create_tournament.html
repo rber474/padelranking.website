@@ -26,7 +26,7 @@
         <script type="text/javascript">
 
             $("#add-player").on('click', function(event){
-                event.preventDefault();
+                //event.preventDefault();
                 $.ajax({
                     url: "{{ url_for('users.add_player', username=current_user.username) }}",
                     type : "POST",
@@ -66,8 +66,8 @@
           <fieldset class="form-group col-md-8  col-sm-12 col-xs-12" aria-labelledby="players_fieldset">
             <span id="players_fieldset" class="h3">{{_('Players')}}</span>
             
-            <div class="form-group">
-            {{ form.players.label }} {{ form.players(class="form-control") }}
+            <div class="form-group col-xs-12">
+            {{ form.players.label }} {{ form.players(class="form-control select2_group") }}
             </div>
             
             <span id="players">{% include '/users/players.html' %}</span>
