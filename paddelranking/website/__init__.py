@@ -67,7 +67,7 @@ def create_app(test_config=None):
 
     # Flask Resize
     app.config.from_object(FlaskResizeConfig)
-    #resize = flask_resize.Resize(app)
+    resize = flask_resize.Resize(app)
 
     # Flask Babel, i18n
     babel.init_app(app)

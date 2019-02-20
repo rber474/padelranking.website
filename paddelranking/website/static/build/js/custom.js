@@ -1157,7 +1157,7 @@ if (typeof NProgress != 'undefined') {
 			var $dataScaleX = $('#dataScaleX');
 			var $dataScaleY = $('#dataScaleY');
 			var options = {
-				  aspectRatio: 16 / 9,
+				  aspectRatio: 1 / 1,
 				  preview: '.img-preview',
 				  crop: function (e) {
 					$dataX.val(Math.round(e.x));
@@ -5094,10 +5094,16 @@ $(document).ready(function() {
                 								tableClass: 'table'} )
         		}
     		},
+    		columnDefs: [ {
+								        className: 'control',
+								        orderable: false,
+								        targets:   0
+								    } ],
+				order: [[ 1, 'desc' ],[ 2, 'desc' ],[ 3, 'asc' ]],
     		searching:  false,
     		info:       false,
     		paging:     false,
-    		ordering:   false
+    		//ordering:   false
     	}).columns.adjust()
     .responsive.recalc();;
 } );

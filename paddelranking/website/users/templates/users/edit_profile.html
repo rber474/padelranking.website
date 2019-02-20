@@ -33,7 +33,7 @@
   	<div>
   	  <div class="col-md-4">
   	  	<div class="profile-pic-edit">
-    			<img src="{{ profile_imagen }}" alt="Your photo" class="img-circle profile_img">
+    			<img id="image" src="{{ profile_imagen }}" alt="Your photo" class="img-circle profile_img">
     			{% if current_user.filename %}
     			<a class="col-md-offset-5 col-sm-12" href="{{ url_for('users.remove_profile_image', username=current_user.username) }}" title="Remove your portrait">{{_('Remove')}}</a>
     			{% endif %}

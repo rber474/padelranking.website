@@ -199,7 +199,7 @@ html , body{
 .nav-sm .nav.side-menu li a {
     text-align: center !important;
     font-weight: 400;
-    font-size: 11px;
+    /*ont-size: 11px;*/
     padding: 14px 5px
 }
 .nav-sm .nav.child_menu li.active,
@@ -231,7 +231,8 @@ html , body{
     width: 210px;
     z-index: 4000;
     background: #3E5367;
-    display: none
+    display: none;
+    font-size:1.4em;
 }
 .nav-sm ul.nav.child_menu li {
     padding: 0 10px
@@ -354,7 +355,8 @@ html , body{
     position: fixed
 }
 body .container.body .right_col {
-    background: #F7F7F7
+    background: #F7F7F7;
+    font-size: 1.3em;
 }
 .nav-md .container.body .right_col {
     padding: 10px 20px 0;
@@ -884,7 +886,7 @@ a:focus {
 }
 .nav.child_menu>li>a {
     color: rgba(255, 255, 255, 0.75);
-    font-size: 12px;
+    /*font-size: 12px;*/
     padding: 9px
 }
 .panel_toolbox {
@@ -1513,7 +1515,7 @@ ul.msg_list li a .time {
 }
 ul.msg_list li a .message {
     display: block !important;
-    font-size: 11px
+    font-size: 14px
 }
 .dropdown-menu.msg_list span {
     white-space: normal
@@ -1523,7 +1525,7 @@ ul.msg_list li a .message {
     box-shadow: none;
     display: none;
     float: left;
-    font-size: 12px;
+    font-size: 1.4em;
     left: 0;
     list-style: none outside none;
     padding: 0;
@@ -1751,7 +1753,7 @@ span.right {
     }
 }
 .tile_count .tile_stats_count span {
-    font-size: 12px
+    font-size: 1em
 }
 @media (min-width: 768px) {
     .tile_count .tile_stats_count span {
