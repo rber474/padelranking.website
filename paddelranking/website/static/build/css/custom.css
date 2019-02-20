@@ -3688,13 +3688,14 @@ div[data-role="editor-toolbar"] {
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 36px
 }
-.select2-container--default .select2-selection--multiple .select2-selection__choice,
-.select2-container--default .select2-selection--multiple .select2-selection__clear {
+.select2-container--default .select2-selection--multiple .select2-selection__choice, .select2-container--default .select2-selection--multiple .select2-selection__clear {
     margin-top: 2px;
     border: none;
-    border-radius: 0;
-    padding: 3px 5px
+    border-radius: 14px;
+    padding: 3px 11px;
+    border: 1px solid;
 }
+
 .select2-container--default.select2-container--focus .select2-selection--multiple {
     border: 1px solid #ccc
 }
