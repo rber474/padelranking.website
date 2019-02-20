@@ -45,8 +45,8 @@
           <fieldset class="form-group col-md-8  col-sm-12 col-xs-12" aria-labelledby="players_fieldset">
             <span id="players_fieldset" class="h3">{{_('Players')}}</span>
             
-            <div class="form-group">
-            {{ form.players.label }} {{ form.players(class="form-control")}}
+            <div class="form-group col-sm-12 col-xs-12">
+            {{ form.players.label }} {{ form.players(class="form-control select2_group", disabled="disabled") }}
             </div>
           </fieldset>
         <div class="form-group col-md-12 col-sm-12 col-xs-12">
