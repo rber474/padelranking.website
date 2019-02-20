@@ -5,9 +5,9 @@ class Config(object):
     LANGUAGES = {
         'en': 'English',
         'es': 'Español',
-        'es-ES' : 'Español',
     }
-
+    BABEL_DEFAULT_LOCALE = 'es'
+    
 class FlaskUploadConfig(object):
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
     UPLOADED_PHOTOS_DEST = '{}/users/static/uploads/photos'.format(basedir)
