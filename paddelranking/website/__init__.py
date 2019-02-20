@@ -2,8 +2,8 @@ import os
 from flask import Flask
 import flask_resize
 
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
+#from flask_admin import Admin
+#from flask_admin.contrib.sqla import ModelView
 
 from flask_babel import Babel
 from flask_uploads import (UploadSet, configure_uploads, IMAGES)
@@ -64,10 +64,10 @@ def create_app(test_config=None):
     admin.add_view(ModelView(Match, db.session))
     admin.add_view(ModelView(MatchResultsByTeam, db.session))
     '''
-    
+
     # Flask Resize
-    #app.config.from_object(FlaskResizeConfig)
-    resize = flask_resize.Resize(app)
+    app.config.from_object(FlaskResizeConfig)
+    #resize = flask_resize.Resize(app)
 
     # Flask Babel, i18n
     babel.init_app(app)
