@@ -4,7 +4,8 @@ basedir = os.path.relpath(os.path.dirname(__file__))
 class Config(object):
     LANGUAGES = {
         'en': 'English',
-        'es': 'Español'
+        'es': 'Español',
+        'es-ES' : 'Español',
     }
 
 class FlaskUploadConfig(object):
