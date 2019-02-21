@@ -1055,13 +1055,13 @@ if (typeof NProgress != 'undefined') {
 			  allowClear: true
 			});
 			$(".select2_group").select2({
-				tags: true
 			});
 			$(".select2_multiple").select2({
 			  maximumSelectionLength: 4,
 			  placeholder: "With Max Selection limit 4",
 			  allowClear: true
 			});
+
 			
 		};
 	   

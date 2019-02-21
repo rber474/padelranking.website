@@ -22,7 +22,29 @@
   	<div>
       <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
       	<p>{{_('All fields marked with * are required')}}</p>
+          
+        <script type="text/javascript">
 
+            $("#add-player").on('click', function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: "{{ url_for('users.add_player', username=current_user.username) }}",
+                    type : "POST",
+                    //dataType : 'json', // data type
+                    data : $("#main-form").serialize(),
+                    success : function(result) {
+                        console.log(result);
+                        $("#players").html(result);
+                    },
+                    error: function(xhr, resp, text) {
+                        console.log(xhr, resp, text);
+                    }
+                });
+
+                event.preventDefault();
+                });
+        </script>
+    
 
         <form class="form"
           method="POST" 
@@ -44,11 +66,14 @@
           <fieldset class="form-group col-md-8  col-sm-12 col-xs-12" aria-labelledby="players_fieldset">
             <span id="players_fieldset" class="h3">{{_('Players')}}</span>
             
-            <div class="form-group col-sm-12 col-xs-12">
-            {{ form.players.label }} {{ form.players(class="form-control select2_group") }}
+            <div class="form-group">
+            {{ form.players.label }} {{ form.players(class="form-control") }}
             </div>
             
-
+            <span id="players">{% include '/users/players.html' %}</span>
+            <div class="form-group">
+                {{ form.add_player(id="add-player", class="btn btn-success btn-sm") }}
+            </div>
           </fieldset>
         <div class="form-group col-md-8 col-sm-12 col-xs-12">{{form.submit(class="btn btn-primary btn-lg")}} {{form.cancel(class="btn  btn-danger btn-lg")}}</div>
         </form>

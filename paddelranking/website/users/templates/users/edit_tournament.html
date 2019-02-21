@@ -23,6 +23,27 @@
       <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
       	<p>{{_('All fields marked with * are required')}}</p>
           
+        <script type="text/javascript">
+
+            $("#add-player").on('click', function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: "{{ url_for('users.add_player', username=current_user.username) }}",
+                    type : "POST",
+                    //dataType : 'json', // data type
+                    data : $("#main-form").serialize(),
+                    success : function(result) {
+                        console.log(result);
+                        $("#players").html(result);
+                    },
+                    error: function(xhr, resp, text) {
+                        console.log(xhr, resp, text);
+                    }
+                });
+
+                event.preventDefault();
+                });
+        </script>
     
 
         <form class="form"
@@ -45,9 +66,16 @@
           <fieldset class="form-group col-md-8  col-sm-12 col-xs-12" aria-labelledby="players_fieldset">
             <span id="players_fieldset" class="h3">{{_('Players')}}</span>
             
-            <div class="form-group col-sm-12 col-xs-12">
-            {{ form.players.label }} {{ form.players(class="form-control select2_group", disabled="disabled") }}
+            <div class="form-group">
+            {{ form.players.label }} {{ form.players(class="form-control")}}
             </div>
+            
+            {% if not tour.matches %}
+            <span id="players">{% include '/users/players.html' %}</span>
+            <div class="form-group">
+                {{ form.add_player(id="add-player", class="btn btn-success btn-sm") }}
+            </div>
+            {% endif %}
           </fieldset>
         <div class="form-group col-md-12 col-sm-12 col-xs-12">
           {{ form.closed.label}} {{ form.closed(class="") }}
