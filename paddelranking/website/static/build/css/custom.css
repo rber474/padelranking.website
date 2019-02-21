@@ -1757,7 +1757,12 @@ span.right {
 }
 @media (min-width: 768px) {
     .tile_count .tile_stats_count span {
-        font-size: 13px
+        font-size: 1em
+    }
+}
+@media (max-width: 400px) {
+    .tile_count .tile_stats_count span {
+        font-size: 0.8em
     }
 }
 .tile_count .tile_stats_count .count_bottom i {
