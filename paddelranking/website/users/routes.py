@@ -195,7 +195,7 @@ def edit_tournament(username, tourid):
 
                     player.createdby = current_user.id
                     newplayers.append(player)
-            import pdb; pdb.set_trace()
+
             delattr(form, 'players_input')
             form.populate_obj(tour)
             tour.players.extend(newplayers)
