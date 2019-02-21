@@ -126,7 +126,6 @@ def create_tournament(username):
 
     tour = Tournament()
     form = BaseTournamentForm(request.form)
-    import pdb; pdb.set_trace()
     form.players.min_entries=4
 
     if form.add_player.data:
