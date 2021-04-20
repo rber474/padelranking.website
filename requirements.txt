@@ -42,7 +42,7 @@ pilkit==2.0
 Pillow==5.4.1
 pkg-resources==0.0.0
 pluggy==0.7.1
-py==1.6.0
+py==1.10.0
 pycparser==2.19
 PyJWT==1.6.4
 pytest==3.7.4
